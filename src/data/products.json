@@ -1,0 +1,1529 @@
+[
+  {
+    "id": "arroz_continente",
+    "name": "Produto genérico — Arroz 1 kg",
+    "supermarketId": "continente",
+    "ingredientId": "arroz",
+    "packSize": 1000,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "arroz_pingo_doce",
+    "name": "Produto genérico — Arroz 1 kg",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "arroz",
+    "packSize": 1000,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "quinoa_continente",
+    "name": "Produto genérico — Quinoa 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "quinoa",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "quinoa_pingo_doce",
+    "name": "Produto genérico — Quinoa 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "quinoa",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "batata_continente",
+    "name": "Produto genérico — Batata 1 kg",
+    "supermarketId": "continente",
+    "ingredientId": "batata",
+    "packSize": 1000,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "batata_pingo_doce",
+    "name": "Produto genérico — Batata 1 kg",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "batata",
+    "packSize": 1000,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "batata_doce_continente",
+    "name": "Produto genérico — Batata-doce 1 kg",
+    "supermarketId": "continente",
+    "ingredientId": "batata_doce",
+    "packSize": 1000,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "batata_doce_pingo_doce",
+    "name": "Produto genérico — Batata-doce 1 kg",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "batata_doce",
+    "packSize": 1000,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "milho_continente",
+    "name": "Produto genérico — Farinha de milho 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "milho",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "milho_pingo_doce",
+    "name": "Produto genérico — Farinha de milho 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "milho",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "grao_bico_continente",
+    "name": "Produto genérico — Grão-de-bico seco 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "grao_bico",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "grao_bico_pingo_doce",
+    "name": "Produto genérico — Grão-de-bico seco 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "grao_bico",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "lentilhas_continente",
+    "name": "Produto genérico — Lentilhas secas 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "lentilhas",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "lentilhas_pingo_doce",
+    "name": "Produto genérico — Lentilhas secas 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "lentilhas",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "feijao_preto_continente",
+    "name": "Produto genérico — Feijão-preto seco 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "feijao_preto",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "feijao_preto_pingo_doce",
+    "name": "Produto genérico — Feijão-preto seco 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "feijao_preto",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "ervilhas_continente",
+    "name": "Produto genérico — Ervilhas 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "ervilhas",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "ervilhas_pingo_doce",
+    "name": "Produto genérico — Ervilhas 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "ervilhas",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "tomate_continente",
+    "name": "Produto genérico — Tomate 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "tomate",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "tomate_pingo_doce",
+    "name": "Produto genérico — Tomate 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "tomate",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "cebola_continente",
+    "name": "Produto genérico — Cebola 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "cebola",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "cebola_pingo_doce",
+    "name": "Produto genérico — Cebola 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "cebola",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "alho_continente",
+    "name": "Produto genérico — Alho 100 g",
+    "supermarketId": "continente",
+    "ingredientId": "alho",
+    "packSize": 100,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "alho_pingo_doce",
+    "name": "Produto genérico — Alho 100 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "alho",
+    "packSize": 100,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "cenoura_continente",
+    "name": "Produto genérico — Cenoura 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "cenoura",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "cenoura_pingo_doce",
+    "name": "Produto genérico — Cenoura 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "cenoura",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "courgette_continente",
+    "name": "Produto genérico — Curgete 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "courgette",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "courgette_pingo_doce",
+    "name": "Produto genérico — Curgete 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "courgette",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pimento_continente",
+    "name": "Produto genérico — Pimento 300 g",
+    "supermarketId": "continente",
+    "ingredientId": "pimento",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pimento_pingo_doce",
+    "name": "Produto genérico — Pimento 300 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "pimento",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "espinafres_continente",
+    "name": "Produto genérico — Espinafres 250 g",
+    "supermarketId": "continente",
+    "ingredientId": "espinafres",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "espinafres_pingo_doce",
+    "name": "Produto genérico — Espinafres 250 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "espinafres",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "cogumelos_continente",
+    "name": "Produto genérico — Cogumelos 250 g",
+    "supermarketId": "continente",
+    "ingredientId": "cogumelos",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "cogumelos_pingo_doce",
+    "name": "Produto genérico — Cogumelos 250 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "cogumelos",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "alface_continente",
+    "name": "Produto genérico — Alface 250 g",
+    "supermarketId": "continente",
+    "ingredientId": "alface",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "alface_pingo_doce",
+    "name": "Produto genérico — Alface 250 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "alface",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pepino_continente",
+    "name": "Produto genérico — Pepino 300 g",
+    "supermarketId": "continente",
+    "ingredientId": "pepino",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pepino_pingo_doce",
+    "name": "Produto genérico — Pepino 300 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "pepino",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "abobora_continente",
+    "name": "Produto genérico — Abóbora 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "abobora",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "abobora_pingo_doce",
+    "name": "Produto genérico — Abóbora 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "abobora",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "couve_continente",
+    "name": "Produto genérico — Couve 300 g",
+    "supermarketId": "continente",
+    "ingredientId": "couve",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "couve_pingo_doce",
+    "name": "Produto genérico — Couve 300 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "couve",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "maca_continente",
+    "name": "Produto genérico — Maçã 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "maca",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "maca_pingo_doce",
+    "name": "Produto genérico — Maçã 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "maca",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "banana_continente",
+    "name": "Produto genérico — Banana 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "banana",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "banana_pingo_doce",
+    "name": "Produto genérico — Banana 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "banana",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "laranja_continente",
+    "name": "Produto genérico — Laranja 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "laranja",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "laranja_pingo_doce",
+    "name": "Produto genérico — Laranja 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "laranja",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pera_continente",
+    "name": "Produto genérico — Pera 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "pera",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pera_pingo_doce",
+    "name": "Produto genérico — Pera 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "pera",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "limao_continente",
+    "name": "Produto genérico — Limão 250 g",
+    "supermarketId": "continente",
+    "ingredientId": "limao",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "limao_pingo_doce",
+    "name": "Produto genérico — Limão 250 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "limao",
+    "packSize": 250,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "azeite_continente",
+    "name": "Produto genérico — Azeite 500 ml",
+    "supermarketId": "continente",
+    "ingredientId": "azeite",
+    "packSize": 500,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "azeite_pingo_doce",
+    "name": "Produto genérico — Azeite 500 ml",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "azeite",
+    "packSize": 500,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "sal_continente",
+    "name": "Produto genérico — Sal 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "sal",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "sal_pingo_doce",
+    "name": "Produto genérico — Sal 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "sal",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "agua_continente",
+    "name": "Produto genérico — Água 1 kg",
+    "supermarketId": "continente",
+    "ingredientId": "agua",
+    "packSize": 1000,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "agua_pingo_doce",
+    "name": "Produto genérico — Água 1 kg",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "agua",
+    "packSize": 1000,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pimenta_continente",
+    "name": "Produto genérico — Pimenta-preta 50 g",
+    "supermarketId": "continente",
+    "ingredientId": "pimenta",
+    "packSize": 50,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pimenta_pingo_doce",
+    "name": "Produto genérico — Pimenta-preta 50 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "pimenta",
+    "packSize": 50,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "vinagre_continente",
+    "name": "Produto genérico — Vinagre simples 250 ml",
+    "supermarketId": "continente",
+    "ingredientId": "vinagre",
+    "packSize": 250,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "vinagre_pingo_doce",
+    "name": "Produto genérico — Vinagre simples 250 ml",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "vinagre",
+    "packSize": 250,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "salsa_continente",
+    "name": "Produto genérico — Salsa 30 g",
+    "supermarketId": "continente",
+    "ingredientId": "salsa",
+    "packSize": 30,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "salsa_pingo_doce",
+    "name": "Produto genérico — Salsa 30 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "salsa",
+    "packSize": 30,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "coentros_continente",
+    "name": "Produto genérico — Coentros 30 g",
+    "supermarketId": "continente",
+    "ingredientId": "coentros",
+    "packSize": 30,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "coentros_pingo_doce",
+    "name": "Produto genérico — Coentros 30 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "coentros",
+    "packSize": 30,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "canela_continente",
+    "name": "Produto genérico — Canela 30 g",
+    "supermarketId": "continente",
+    "ingredientId": "canela",
+    "packSize": 30,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "canela_pingo_doce",
+    "name": "Produto genérico — Canela 30 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "canela",
+    "packSize": 30,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "ovo_continente",
+    "name": "Produto genérico — Ovo 6 unidades",
+    "supermarketId": "continente",
+    "ingredientId": "ovo",
+    "packSize": 6,
+    "unit": "un",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [
+      "ovo"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "ovo_pingo_doce",
+    "name": "Produto genérico — Ovo 6 unidades",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "ovo",
+    "packSize": 6,
+    "unit": "un",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [
+      "ovo"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "leite_continente",
+    "name": "Produto genérico — Leite 1 kg",
+    "supermarketId": "continente",
+    "ingredientId": "leite",
+    "packSize": 1000,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [
+      "leite"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "incompativel"
+    }
+  },
+  {
+    "id": "leite_pingo_doce",
+    "name": "Produto genérico — Leite 1 kg",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "leite",
+    "packSize": 1000,
+    "unit": "ml",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [
+      "leite"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "incompativel"
+    }
+  },
+  {
+    "id": "queijo_continente",
+    "name": "Produto genérico — Queijo 200 g",
+    "supermarketId": "continente",
+    "ingredientId": "queijo",
+    "packSize": 200,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": "unknown",
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "incompativel",
+      "sem_gluten": "desconhecido",
+      "sem_lactose": "desconhecido"
+    }
+  },
+  {
+    "id": "queijo_pingo_doce",
+    "name": "Produto genérico — Queijo 200 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "queijo",
+    "packSize": 200,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": "unknown",
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "incompativel",
+      "sem_gluten": "desconhecido",
+      "sem_lactose": "desconhecido"
+    }
+  },
+  {
+    "id": "frango_continente",
+    "name": "Produto genérico — Frango 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "frango",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "frango_pingo_doce",
+    "name": "Produto genérico — Frango 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "frango",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "sardinha_continente",
+    "name": "Produto genérico — Sardinha 300 g",
+    "supermarketId": "continente",
+    "ingredientId": "sardinha",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [
+      "peixe"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "sardinha_pingo_doce",
+    "name": "Produto genérico — Sardinha 300 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "sardinha",
+    "packSize": 300,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": [
+      "peixe"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "pao_trigo_continente",
+    "name": "Produto genérico — Pão de trigo 500 g",
+    "supermarketId": "continente",
+    "ingredientId": "pao_trigo",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": "unknown",
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "desconhecido",
+      "sem_gluten": "incompativel",
+      "sem_lactose": "desconhecido"
+    }
+  },
+  {
+    "id": "pao_trigo_pingo_doce",
+    "name": "Produto genérico — Pão de trigo 500 g",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "pao_trigo",
+    "packSize": 500,
+    "unit": "g",
+    "price": null,
+    "priceState": "desconhecido",
+    "priceUpdatedAt": null,
+    "allergens": "unknown",
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "desconhecido",
+      "sem_gluten": "incompativel",
+      "sem_lactose": "desconhecido"
+    }
+  },
+  {
+    "id": "cesta-continente-2305902",
+    "name": "Arroz Agulha Cigala",
+    "supermarketId": "continente",
+    "ingredientId": "arroz",
+    "packSize": 1000,
+    "unit": "g",
+    "price": 1.64,
+    "priceState": "observado",
+    "priceUpdatedAt": "2026-11-16",
+    "priceObservation": {
+      "provider": "cesta_mcp",
+      "sourceProductId": "2305902",
+      "checkedAt": "2026-11-16T21:53:25.341Z",
+      "checkedDate": "2026-11-16",
+      "currency": "EUR",
+      "availability": "available"
+    },
+    "allergens": "unknown",
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "desconhecido",
+      "sem_gluten": "desconhecido",
+      "sem_lactose": "desconhecido"
+    },
+    "brand": "Cigala",
+    "productUrl": "https://www.continente.pt/produto/arroz-agulha-cigala-2305902.html",
+    "barcode": "5601260037109",
+    "barcodes": [
+      "5601260037109",
+      "2100230590208"
+    ],
+    "externalProductId": "2305902",
+    "availability": "available",
+    "catalogueSource": "cesta_mcp",
+    "imageUrl": "https://images.openfoodfacts.org/images/products/560/126/003/7109/front_pt.4.400.jpg",
+    "imageSourceUrl": "https://world.openfoodfacts.org/product/5601260037109"
+  },
+  {
+    "id": "cesta-pingo_doce-623900",
+    "name": "Arroz Agulha",
+    "supermarketId": "pingo_doce",
+    "ingredientId": "arroz",
+    "packSize": 1000,
+    "unit": "g",
+    "price": 1.64,
+    "priceState": "observado",
+    "priceUpdatedAt": "2026-11-16",
+    "priceObservation": {
+      "provider": "cesta_mcp",
+      "sourceProductId": "623900",
+      "checkedAt": "2026-11-16T21:53:25.715Z",
+      "checkedDate": "2026-11-16",
+      "currency": "EUR",
+      "availability": "available",
+      "unitPrice": {
+        "amount": 1.64,
+        "unit": "kg"
+      }
+    },
+    "allergens": "unknown",
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "desconhecido",
+      "sem_gluten": "desconhecido",
+      "sem_lactose": "desconhecido"
+    },
+    "brand": "Cigala",
+    "productUrl": "https://www.pingodoce.pt/home/produtos/mercearia/arroz-massa-e-leguminosas/arroz/arroz-agulha-cigala-623900.html",
+    "barcode": null,
+    "barcodes": [],
+    "externalProductId": "623900",
+    "availability": "available",
+    "catalogueSource": "cesta_mcp"
+  }
+]

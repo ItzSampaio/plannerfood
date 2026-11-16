@@ -1,0 +1,572 @@
+[
+  {
+    "id": "arroz",
+    "name": "Arroz",
+    "category": "hidratos",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "quinoa",
+    "name": "Quinoa",
+    "category": "hidratos",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "batata",
+    "name": "Batata",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "batata_doce",
+    "name": "Batata-doce",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "milho",
+    "name": "Farinha de milho",
+    "category": "hidratos",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "grao_bico",
+    "name": "Grão-de-bico seco",
+    "category": "despensa",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "lentilhas",
+    "name": "Lentilhas secas",
+    "category": "despensa",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "feijao_preto",
+    "name": "Feijão-preto seco",
+    "category": "despensa",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "ervilhas",
+    "name": "Ervilhas",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "tomate",
+    "name": "Tomate",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "cebola",
+    "name": "Cebola",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "alho",
+    "name": "Alho",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "cenoura",
+    "name": "Cenoura",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "courgette",
+    "name": "Curgete",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "pimento",
+    "name": "Pimento",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "espinafres",
+    "name": "Espinafres",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "cogumelos",
+    "name": "Cogumelos",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "alface",
+    "name": "Alface",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "pepino",
+    "name": "Pepino",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "abobora",
+    "name": "Abóbora",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "couve",
+    "name": "Couve",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "maca",
+    "name": "Maçã",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "banana",
+    "name": "Banana",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "laranja",
+    "name": "Laranja",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "pera",
+    "name": "Pera",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "limao",
+    "name": "Limão",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "azeite",
+    "name": "Azeite",
+    "category": "despensa",
+    "baseUnit": "ml",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "sal",
+    "name": "Sal",
+    "category": "despensa",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": true
+  },
+  {
+    "id": "agua",
+    "name": "Água",
+    "category": "despensa",
+    "baseUnit": "ml",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": true
+  },
+  {
+    "id": "pimenta",
+    "name": "Pimenta-preta",
+    "category": "despensa",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": true
+  },
+  {
+    "id": "vinagre",
+    "name": "Vinagre simples",
+    "category": "despensa",
+    "baseUnit": "ml",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": true
+  },
+  {
+    "id": "salsa",
+    "name": "Salsa",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "coentros",
+    "name": "Coentros",
+    "category": "frutas_legumes",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "canela",
+    "name": "Canela",
+    "category": "despensa",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "ovo",
+    "name": "Ovo",
+    "category": "laticinios_ovos",
+    "baseUnit": "un",
+    "allergens": [
+      "ovo"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "leite",
+    "name": "Leite",
+    "category": "laticinios_ovos",
+    "baseUnit": "ml",
+    "allergens": [
+      "leite"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "incompativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "queijo",
+    "name": "Queijo",
+    "category": "laticinios_ovos",
+    "baseUnit": "g",
+    "allergens": [
+      "leite"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "incompativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "frango",
+    "name": "Frango",
+    "category": "carne_peixe",
+    "baseUnit": "g",
+    "allergens": [],
+    "dietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "sardinha",
+    "name": "Sardinha",
+    "category": "carne_peixe",
+    "baseUnit": "g",
+    "allergens": [
+      "peixe"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    },
+    "isNeutral": false
+  },
+  {
+    "id": "pao_trigo",
+    "name": "Pão de trigo",
+    "category": "hidratos",
+    "baseUnit": "g",
+    "allergens": [
+      "gluten"
+    ],
+    "dietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "desconhecido",
+      "sem_gluten": "incompativel",
+      "sem_lactose": "desconhecido"
+    },
+    "isNeutral": false
+  }
+]

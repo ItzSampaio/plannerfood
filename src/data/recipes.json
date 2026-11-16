@@ -1,0 +1,1786 @@
+[
+  {
+    "id": "receita_01",
+    "name": "Papa de arroz, banana e canela",
+    "description": "Receita caseira de inspiração portuguesa: papa de arroz, banana e canela.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 25,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "arroz",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "banana",
+        "amount": 160,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 300,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Passe o arroz por água fria e escorra-o.",
+      "Leve o arroz e a água a lume brando; mexa e coza durante cerca de 20 minutos, até ficar macio.",
+      "Junte a banana em rodelas nos últimos minutos, polvilhe com canela e sirva morno."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_02",
+    "name": "Papas de quinoa, maçã e canela",
+    "description": "Receita caseira de inspiração portuguesa: papas de quinoa, maçã e canela.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 20,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "quinoa",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 250,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "maca",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a quinoa em água corrente e escorra-a.",
+      "Coza a quinoa na água, em lume brando, durante 15 minutos.",
+      "Rale a maçã, misture-a na quinoa e termine com canela."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_03",
+    "name": "Papas de farinha de milho e pera",
+    "description": "Receita caseira de inspiração portuguesa: papas de farinha de milho e pera.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 15,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "milho",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 300,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "pera",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Dissolva a farinha de milho em parte da água fria para evitar grumos.",
+      "Junte a restante água e cozinhe em lume brando, mexendo, durante 10 a 12 minutos.",
+      "Sirva com a pera cortada em cubos e uma pitada de canela."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_04",
+    "name": "Fruta fresca de maçã e laranja",
+    "description": "Receita caseira de inspiração portuguesa: fruta fresca de maçã e laranja.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 10,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "maca",
+        "amount": 160,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "laranja",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "banana",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "limao",
+        "amount": 10,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a maçã e descasque a laranja e a banana.",
+      "Corte a fruta em pedaços e coloque-a numa taça.",
+      "Regue com o sumo de limão, envolva e sirva de imediato."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_05",
+    "name": "Batata-doce assada com laranja",
+    "description": "Receita caseira de inspiração portuguesa: batata-doce assada com laranja.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "batata_doce",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "laranja",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Aqueça o forno a 200 °C e lave a batata-doce.",
+      "Corte-a em cubos pequenos e asse num tabuleiro durante 25 minutos, virando a meio.",
+      "Sirva com a laranja descascada e canela."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_06",
+    "name": "Quinoa cremosa com banana e laranja",
+    "description": "Receita caseira de inspiração portuguesa: quinoa cremosa com banana e laranja.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 20,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "quinoa",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 250,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "banana",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "laranja",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a quinoa e coza-a na água durante cerca de 15 minutos.",
+      "Descasque a banana e a laranja e corte-as em pedaços.",
+      "Distribua a fruta sobre a quinoa quente e polvilhe com canela."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_07",
+    "name": "Maçã e pera cozidas com canela",
+    "description": "Receita caseira de inspiração portuguesa: maçã e pera cozidas com canela.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 20,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "maca",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "pera",
+        "amount": 160,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave, descaroce e corte a maçã e a pera em cubos.",
+      "Coza a fruta com a água e a canela, tapada, durante 12 a 15 minutos.",
+      "Esmague ligeiramente com um garfo e sirva morna."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_08",
+    "name": "Arroz de ervilhas e cenoura",
+    "description": "Receita caseira de inspiração portuguesa: arroz de ervilhas e cenoura.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "arroz",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ervilhas",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cenoura",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 350,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Pique a cebola e corte a cenoura em cubos pequenos.",
+      "Aqueça o azeite num tacho e amoleça a cebola e a cenoura durante 5 minutos.",
+      "Junte o arroz, as ervilhas, a água e o sal; tape e coza em lume brando por 18 minutos."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_09",
+    "name": "Grão-de-bico guisado com espinafres",
+    "description": "Receita caseira de inspiração portuguesa: grão-de-bico guisado com espinafres.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 780,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "grao_bico",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "espinafres",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "alho",
+        "amount": 5,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 500,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "coentros",
+        "amount": 8,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Demolhe o grão-de-bico em bastante água durante a noite e escorra-o.",
+      "Refogue a cebola e o alho picados no azeite; junte o tomate em cubos e cozinhe 5 minutos.",
+      "Adicione o grão e a água, coza até ficar tenro (cerca de 50 a 60 minutos) e junte os espinafres nos últimos 5 minutos.",
+      "Retifique o sal e sirva com coentros picados."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_10",
+    "name": "Lentilhas guisadas com cenoura",
+    "description": "Receita caseira de inspiração portuguesa: lentilhas guisadas com cenoura.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 40,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "lentilhas",
+        "amount": 160,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cenoura",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 450,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "salsa",
+        "amount": 8,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Passe as lentilhas por água e escorra-as; corte a cenoura em rodelas.",
+      "Refogue a cebola picada no azeite, junte o tomate e a cenoura e cozinhe 5 minutos.",
+      "Adicione as lentilhas e a água; coza em lume brando por 25 a 30 minutos.",
+      "Finalize com salsa picada e ajuste o sal."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_11",
+    "name": "Feijão-preto com arroz",
+    "description": "Receita caseira de inspiração portuguesa: feijão-preto com arroz.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 780,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "feijao_preto",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "arroz",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 650,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Demolhe o feijão-preto durante a noite e escorra-o.",
+      "Coza o feijão em água limpa até ficar tenro, cerca de 60 a 75 minutos.",
+      "À parte, refogue a cebola e o tomate no azeite, junte o feijão escorrido e um pouco da água da cozedura.",
+      "Coza o arroz em água com sal e sirva-o com o feijão."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_12",
+    "name": "Quinoa salteada com cogumelos e espinafres",
+    "description": "Receita caseira de inspiração portuguesa: quinoa salteada com cogumelos e espinafres.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 30,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "quinoa",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cogumelos",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "espinafres",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "alho",
+        "amount": 5,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 300,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a quinoa e coza-a na água durante 15 minutos; escorra o excesso, se necessário.",
+      "Fatie os cogumelos e pique a cebola e o alho.",
+      "Salteie a cebola, o alho e os cogumelos no azeite; junte os espinafres até murcharem.",
+      "Envolva a quinoa cozida, tempere com sal e sirva."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_13",
+    "name": "Tacho de batata, couve e grão",
+    "description": "Receita caseira de inspiração portuguesa: tacho de batata, couve e grão.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 780,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "batata",
+        "amount": 250,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "couve",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "grao_bico",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 600,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Demolhe o grão-de-bico durante a noite e coza-o até ficar tenro; escorra-o.",
+      "Corte a batata em cubos, a couve em tiras e pique a cebola.",
+      "Refogue a cebola no azeite, junte a batata e a água e coza 12 minutos.",
+      "Adicione a couve e o grão cozido, cozinhe mais 8 minutos e tempere com sal."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_14",
+    "name": "Arroz malandrinho de abóbora e ervilhas",
+    "description": "Receita caseira de inspiração portuguesa: arroz malandrinho de abóbora e ervilhas.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "arroz",
+        "amount": 130,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "abobora",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ervilhas",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 450,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Pique a cebola e corte a abóbora em cubos.",
+      "Refogue a cebola no azeite, junte o tomate e a abóbora e cozinhe 5 minutos.",
+      "Adicione o arroz, as ervilhas, a água e o sal; coza destapado em lume brando por cerca de 18 minutos, mexendo ocasionalmente."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_15",
+    "name": "Arroz de cogumelos e espinafres",
+    "description": "Receita caseira de inspiração portuguesa: arroz de cogumelos e espinafres.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "arroz",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cogumelos",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "espinafres",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "alho",
+        "amount": 5,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 350,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "salsa",
+        "amount": 8,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Pique a cebola e o alho e fatie os cogumelos.",
+      "Refogue a cebola e o alho no azeite; junte os cogumelos e cozinhe até perderem parte da água.",
+      "Adicione o arroz e a água quente, tape e coza em lume brando por 16 minutos.",
+      "Junte os espinafres nos últimos minutos e termine com salsa picada."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_16",
+    "name": "Quinoa com curgete e pimento",
+    "description": "Receita caseira de inspiração portuguesa: quinoa com curgete e pimento.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 30,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "quinoa",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "courgette",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "pimento",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 300,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a quinoa e coza-a na água durante 15 minutos.",
+      "Corte a curgete e o pimento em cubos e pique a cebola.",
+      "Salteie os legumes no azeite por 8 a 10 minutos, até ficarem tenros.",
+      "Envolva a quinoa, tempere com sal e sirva."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_17",
+    "name": "Lentilhas estufadas com abóbora",
+    "description": "Receita caseira de inspiração portuguesa: lentilhas estufadas com abóbora.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 40,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "lentilhas",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "abobora",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 450,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "coentros",
+        "amount": 8,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave as lentilhas; corte a abóbora em cubos e pique a cebola.",
+      "Refogue a cebola no azeite, junte o tomate e a abóbora e cozinhe 5 minutos.",
+      "Adicione as lentilhas e a água; tape e cozinhe em lume brando por cerca de 30 minutos.",
+      "Sirva com coentros picados e sal ajustado."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_18",
+    "name": "Grão-de-bico com batata-doce e espinafres",
+    "description": "Receita caseira de inspiração portuguesa: grão-de-bico com batata-doce e espinafres.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 780,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "grao_bico",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "batata_doce",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "espinafres",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 500,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Demolhe o grão-de-bico durante a noite e coza-o até ficar tenro.",
+      "Refogue a cebola e o tomate no azeite; junte a batata-doce em cubos e a água.",
+      "Cozinhe 15 minutos, adicione o grão cozido e termine quando a batata estiver macia.",
+      "Junte os espinafres nos últimos minutos e tempere com sal."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_19",
+    "name": "Feijão-preto estufado com tomate",
+    "description": "Receita caseira de inspiração portuguesa: feijão-preto estufado com tomate.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 780,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "feijao_preto",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 70,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cenoura",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "alho",
+        "amount": 5,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 550,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "salsa",
+        "amount": 8,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Demolhe o feijão-preto durante a noite e coza-o em água limpa até ficar tenro.",
+      "Pique a cebola e o alho; corte a cenoura e o tomate em cubos.",
+      "Refogue os legumes no azeite, junte o feijão cozido e um pouco da água da cozedura.",
+      "Deixe apurar 15 minutos e sirva com salsa picada."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_20",
+    "name": "Sopa rústica de abóbora, batata e couve",
+    "description": "Receita caseira de inspiração portuguesa: sopa rústica de abóbora, batata e couve.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "abobora",
+        "amount": 250,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "batata",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "couve",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 10,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 650,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Corte a abóbora e a batata em cubos e pique a cebola.",
+      "Coza a abóbora, a batata e a cebola na água durante 18 minutos.",
+      "Junte a couve em tiras e cozinhe mais 10 minutos; esmague alguns pedaços de batata para engrossar o caldo.",
+      "Tempere com azeite e sal e sirva quente."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_21",
+    "name": "Ervilhas guisadas com batata e tomate",
+    "description": "Receita caseira de inspiração portuguesa: ervilhas guisadas com batata e tomate.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "ervilhas",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "batata",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 350,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Pique a cebola e corte a batata e o tomate em cubos.",
+      "Refogue a cebola no azeite, junte o tomate e cozinhe 4 minutos.",
+      "Adicione a batata, as ervilhas e a água; tape e cozinhe cerca de 25 minutos.",
+      "Confirme que a batata está tenra, ajuste o sal e sirva."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_22",
+    "name": "Salada de fruta fresca",
+    "description": "Receita caseira de inspiração portuguesa: salada de fruta fresca.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 10,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "banana",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "maca",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "pera",
+        "amount": 120,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "laranja",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "limao",
+        "amount": 8,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a maçã e descasque a banana, a pera e a laranja.",
+      "Corte a fruta em pedaços pequenos e coloque-a numa taça.",
+      "Regue com sumo de limão, envolva e sirva fresca."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_23",
+    "name": "Maçã assada com canela",
+    "description": "Receita caseira de inspiração portuguesa: maçã assada com canela.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 30,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "maca",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 30,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Aqueça o forno a 190 °C e lave as maçãs.",
+      "Retire os caroços sem separar a fruta e coloque-a num tabuleiro com a água.",
+      "Polvilhe com canela e asse 20 a 25 minutos, até ficar macia."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_24",
+    "name": "Pera e laranja com limão",
+    "description": "Receita caseira de inspiração portuguesa: pera e laranja com limão.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 10,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "pera",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "laranja",
+        "amount": 180,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "limao",
+        "amount": 5,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave a pera e descasque a laranja.",
+      "Corte a fruta em pedaços e disponha-a em duas taças.",
+      "Junte algumas gotas de sumo de limão e sirva de imediato."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_25",
+    "name": "Palitos de cenoura com húmus",
+    "description": "Receita caseira de inspiração portuguesa: palitos de cenoura com húmus.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 780,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "grao_bico",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cenoura",
+        "amount": 160,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 8,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "limao",
+        "amount": 15,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "alho",
+        "amount": 2,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 20,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Demolhe o grão-de-bico durante a noite e coza-o até ficar muito tenro; escorra e reserve um pouco da água.",
+      "Triture ou esmague o grão com azeite, sumo de limão, alho e água da cozedura até obter uma pasta espessa.",
+      "Descasque e corte a cenoura em palitos; sirva com o húmus e uma pitada de sal."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_26",
+    "name": "Salada pequena de pepino e tomate",
+    "description": "Receita caseira de inspiração portuguesa: salada pequena de pepino e tomate.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 10,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "pepino",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 5,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "vinagre",
+        "amount": 5,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "salsa",
+        "amount": 4,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave o pepino e o tomate e corte-os em pedaços pequenos.",
+      "Tempere com azeite, vinagre e uma pitada de sal.",
+      "Junte salsa picada, envolva e sirva fresca."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_27",
+    "name": "Gomos de batata-doce assados",
+    "description": "Receita caseira de inspiração portuguesa: gomos de batata-doce assados.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 30,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "batata_doce",
+        "amount": 280,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 8,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "pimenta",
+        "amount": 1,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Aqueça o forno a 210 °C e lave a batata-doce.",
+      "Corte-a em gomos, envolva com azeite, pimenta e sal e espalhe num tabuleiro.",
+      "Asse 20 a 25 minutos, virando os gomos a meio, até dourarem."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_28",
+    "name": "Abóbora assada com canela",
+    "description": "Receita caseira de inspiração portuguesa: abóbora assada com canela.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 30,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "abobora",
+        "amount": 250,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 5,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "canela",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Aqueça o forno a 200 °C e corte a abóbora em cubos pequenos.",
+      "Disponha-a num tabuleiro, regue com um pouco de azeite e polvilhe com canela.",
+      "Asse durante 20 a 25 minutos, até ficar macia; deixe arrefecer antes de servir."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "compativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_29",
+    "name": "Ovos mexidos com espinafres",
+    "description": "Receita caseira de inspiração portuguesa: ovos mexidos com espinafres.",
+    "mealTypes": [
+      "pequeno_almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 15,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "ovo",
+        "amount": 2,
+        "unit": "un"
+      },
+      {
+        "ingredientId": "espinafres",
+        "amount": 60,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 5,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 1,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave os espinafres e bata os ovos numa taça.",
+      "Aqueça o azeite numa frigideira e salteie os espinafres até murcharem.",
+      "Junte os ovos e mexa em lume brando até ficarem cozinhados, mas macios; tempere com sal."
+    ],
+    "declaredAllergens": [
+      "ovo"
+    ],
+    "declaredDietCompatibility": {
+      "vegetariana": "compativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_30",
+    "name": "Frango estufado com arroz",
+    "description": "Receita caseira de inspiração portuguesa: frango estufado com arroz.",
+    "mealTypes": [
+      "almoco"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 45,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "frango",
+        "amount": 250,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "arroz",
+        "amount": 140,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "tomate",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebola",
+        "amount": 80,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "alho",
+        "amount": 5,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 15,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "agua",
+        "amount": 400,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "salsa",
+        "amount": 6,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Pique a cebola e o alho e corte o tomate em cubos.",
+      "Doure o frango no azeite; junte a cebola, o alho e o tomate e cozinhe 5 minutos.",
+      "Adicione água, tape e estufe até o frango estar completamente cozinhado, cerca de 25 minutos.",
+      "Coza o arroz à parte, tempere o frango com sal e salsa e sirva junto."
+    ],
+    "declaredAllergens": [],
+    "declaredDietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_31",
+    "name": "Sardinhas assadas com batata",
+    "description": "Receita caseira de inspiração portuguesa: sardinhas assadas com batata.",
+    "mealTypes": [
+      "jantar"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 35,
+    "tags": [],
+    "ingredients": [
+      {
+        "ingredientId": "sardinha",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "batata",
+        "amount": 350,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "limao",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "azeite",
+        "amount": 10,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "sal",
+        "amount": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Lave as batatas e coza-as em água até ficarem tenras; escorra e corte ao meio.",
+      "Grelhe as sardinhas até estarem bem cozinhadas no centro, virando-as uma vez.",
+      "Regue com azeite e sumo de limão, tempere com sal e sirva com as batatas."
+    ],
+    "declaredAllergens": [
+      "peixe"
+    ],
+    "declaredDietCompatibility": {
+      "vegetariana": "incompativel",
+      "vegana": "incompativel",
+      "sem_gluten": "compativel",
+      "sem_lactose": "compativel"
+    }
+  },
+  {
+    "id": "receita_32",
+    "name": "Pão de trigo com queijo",
+    "description": "Receita caseira de inspiração portuguesa: pão de trigo com queijo.",
+    "mealTypes": [
+      "lanche"
+    ],
+    "baseServings": 2,
+    "prepMinutes": 5,
+    "tags": [
+      "rapido"
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "pao_trigo",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "queijo",
+        "amount": 60,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Corte o pão em duas porções e distribua o queijo.",
+      "Sirva tal como está ou toste brevemente numa frigideira até o queijo amolecer."
+    ],
+    "declaredAllergens": [
+      "gluten",
+      "leite"
+    ],
+    "declaredDietCompatibility": {
+      "vegetariana": "desconhecido",
+      "vegana": "incompativel",
+      "sem_gluten": "incompativel",
+      "sem_lactose": "incompativel"
+    }
+  }
+]
