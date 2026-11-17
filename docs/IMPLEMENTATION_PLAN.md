@@ -156,6 +156,15 @@ Status: done
 - Preserved retailer identity, source IDs, URLs, timestamps, raw evidence, observed price state, unknown safety fields and stale-price handling.
 - Confirmed live read-only observations for both Continente and Pingo Doce. No products were automatically inserted into the active catalogue.
 
+## Phase 15 — Real catalogue coverage audit and implementation plan
+
+Status: investigated and planned; implementation not started
+
+- Audited 40 ingredients, 38 recipe-referenced ingredients, 32 recipes and 82 product records.
+- Confirmed 80 generic placeholders and 2 non-generic observed rice records; pending/rejected observation counts are browser-local and not present in repository data.
+- Created `PHASE15_PLAN.md` with the complete ingredient matrix, Cesta limitations, enrichment workflow, milestones, risks and implementation sequence.
+- No application code, catalogue data, tests, dependencies or configuration were changed.
+
 ## Phase 14 — Smart catalogue expansion
 
 Status: done

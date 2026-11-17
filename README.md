@@ -1,5 +1,7 @@
 # SmartBasket
 
+O plano de auditoria e expansão do catálogo está em [PHASE15_PLAN.md](PHASE15_PLAN.md). A Fase 15 foi apenas investigada; não foram adicionados produtos automaticamente.
+
 ## Dados de produtos e Cesta.pt
 
 O catálogo inclui entradas genéricas e produtos observados. A pesquisa manual na cesta.pt é opcional e só usa ferramentas de leitura de preços/produtos. Os resultados entram como observações pendentes e nunca alteram o catálogo sem revisão explícita. Não são usados carrinhos, checkout, pagamentos ou contas.
