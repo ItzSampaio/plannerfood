@@ -85,6 +85,14 @@ Status: done — local observation foundation only; no external fetching enabled
 - Added pure Open Food Facts and Open Prices payload normalizers; they accept user-supplied JSON and do not perform HTTP requests.
 - Added exact-EAN and name-candidate matching suggestions, stale observation classification and adversarial unit tests.
 - Added local JSON observation import, review display and rejection in the catalogue manager. Imported observations remain separate from approved Products; no automatic approval or price-state conversion occurs.
+
+## Phase 17 — Product review, validation and controlled approval
+
+Status: investigated and preserved; no automatic approvals
+
+- Audited the Phase 16 batch and preserved all 14 pending observations.
+- Confirmed that review must continue through the existing explicit approval, audit, backup and safety validation workflow.
+- No product records were added or approved automatically.
 - Existing manual entry, CSV/JSON product import/export, price history, safety checks and budget calculations remain unchanged. Pingo Doce is not claimed to work.
 
 ## Phase 10 — Real catalogue enrichment

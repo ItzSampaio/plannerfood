@@ -4,6 +4,8 @@ O plano de auditoria e expansão do catálogo está em [PHASE15_PLAN.md](PHASE15
 
 A Fase 16 criou 14 observações Cesta pendentes para sete grupos de ingredientes prioritários. Consulte [PHASE16_REPORT.md](PHASE16_REPORT.md) e [docs/PHASE16_COVERAGE_REPORT.md](docs/PHASE16_COVERAGE_REPORT.md). Nenhum produto foi aprovado automaticamente.
 
+A Fase 17 mantém essas observações pendentes para revisão controlada. Consulte [PHASE17_REPORT.md](PHASE17_REPORT.md); nenhum produto foi aprovado automaticamente.
+
 ## Dados de produtos e Cesta.pt
 
 O catálogo inclui entradas genéricas e produtos observados. A pesquisa manual na cesta.pt é opcional e só usa ferramentas de leitura de preços/produtos. Os resultados entram como observações pendentes e nunca alteram o catálogo sem revisão explícita. Não são usados carrinhos, checkout, pagamentos ou contas.
