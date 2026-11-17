@@ -124,3 +124,53 @@ Status: done
 - Updated selection, basket, budget-facing expected checkout data, shopping-list text, validation and CSV/JSON persistence.
 - Variable-weight products without actual checkout quantity remain incomplete and never claim an exact checkout total.
 - Added calculation and import/export regression coverage. No observations were promoted and no external data was fetched.
+
+## Phase 12 — Offline catalogue quality recovery
+
+Status: done — validator quality improvements only; product enrichment blocked by evidence
+
+- Audited saved collector files and existing non-generic product records without network access.
+- Added retailer-scoped uniqueness checks for barcodes and external product IDs; repeated primary/alias barcode representation within one product remains valid.
+- No products were added. Saved Continente observations lack confirmed package size and allergen data (and include retrieval failures); saved Pingo Doce evidence does not support further real products. The two existing observed rice records retain unknown allergens and dietary compatibility and remain unapproved for safe use.
+- No live prices, external requests, paid services, or fabricated data were used.
+- Verification: typecheck passed; lint passed with 10 existing warnings and 0 errors; 13 test files / 107 tests passed; production build passed; `validate:data` passed.
+
+## Phase 13 — Settings, data management and audit history
+
+Status: done
+
+- Added `/definicoes`, `/historico`, and `/sobre-precos` with responsive pt-PT navigation and explanations of all price certainty states, stale observations, variable-weight uncertainty, and incomplete budgets.
+- Added complete schema-versioned JSON backup/restore for local catalogue, plan, saved wizard preferences, observations, approval records, product audit events and plan-generation state. Restore validates all sections, previews counts and conflicting product IDs, requires explicit confirmation, and replaces one canonical storage envelope atomically. Unsupported or incomplete backups are rejected.
+- Added confirmed local data reset by atomically writing an empty envelope; the shipped catalogue remains available.
+- Added future product create/update and observation rejection audit events. The history presents existing price history and observation approval records, paired original/result values when available, translated price states, source, timestamp and associated IDs. Missing past events are marked unavailable rather than fabricated.
+- Added regression checks for legacy-key migration, reset/restore failure preservation, unsafe plan overrides and confirmation behavior.
+- Verification: typecheck passed; lint passed with 10 existing warnings and 0 errors; 15 test files / 123 tests passed; production build passed; `validate:data` passed.
+
+## Phase 14 — Optional Cesta read-only price discovery
+
+Status: done
+
+- Confirmed live MCP schemas and implemented an explicit allowlist for `search_products`, `get_product`, `compare_price`, `build_basket` and `whats_on_promo`.
+- Excluded `create_basket`, `add_items_to_basket` and `create_checkout_link`.
+- Added a manually initiated catalogue search; results become pending `RawObservation` records and never bypass approval.
+- Preserved retailer identity, source IDs, URLs, timestamps, raw evidence, observed price state, unknown safety fields and stale-price handling.
+- Confirmed live read-only observations for both Continente and Pingo Doce. No products were automatically inserted into the active catalogue.
+
+## Phase 14 — Smart catalogue expansion
+
+Status: done
+
+- Added category and quality filters to catalogue review.
+- Added recipe-ingredient coverage reporting.
+- Preserved manual Cesta discovery as pending observations only; no automatic product imports or cart actions.
+- Current approved real catalogue remains two observed rice records; generic placeholders were not replaced without sufficient evidence.
+
+## Phase 14 — Optional Cesta read-only price discovery
+
+Status: done
+
+- Confirmed live MCP schemas and implemented an explicit allowlist for five read-only tools.
+- Excluded cart, checkout and mutation tools.
+- Added manually initiated catalogue search; results become pending `RawObservation` records and never bypass approval.
+- Preserved retailer identity, source IDs, URLs, timestamps, raw evidence, observed price state, unknown safety fields and stale-price handling.
+- Confirmed live read-only observations for both Continente and Pingo Doce. No products were automatically inserted into the active catalogue.

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { catalogue } from '../../src/lib/catalogue';
 import { exportProductsCsv, exportProductsJson, parseProductImport, readSavedCatalogue } from '../../src/lib/data/product-catalogue';
 import { withPriceHistory } from '../../src/lib/data/price-history';
+import { validateProducts } from '../../src/lib/data/validators';
 import type { Product } from '../../src/lib/types';
 
 const seedProduct = catalogue.products[0]!;
@@ -109,5 +110,37 @@ describe('editable product catalogue files', () => {
     const imported = parseProductImport(exported, 'json', catalogue, false);
     expect(imported.ok).toBe(true);
     if (imported.ok) expect(imported.catalogue.products.find((product) => product.id === source.id)).toMatchObject({ sellingModel: 'variable_weight', minimumQuantity: 600, minimumQuantityUnit: 'g' });
+  });
+
+  it('rejects barcode aliases assigned to different products at the same retailer', () => {
+    const first = catalogue.products.find((product) => product.supermarketId === 'continente');
+    const second = catalogue.products.find((product) => product.supermarketId === 'continente' && product.id !== first?.id);
+    if (!first || !second) throw new Error('Two Continente seed products required for validator test.');
+    const shared = '1234567890123';
+    const result = validateProducts([
+      { ...first, barcode: shared },
+      { ...second, barcodes: [shared] },
+    ], catalogue.ingredients);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.errors.some((error) => error.code === 'barcode.duplicate' && error.path.endsWith('.barcodes[0]'))).toBe(true);
+  });
+
+  it('accepts the same EAN in a product primary field and its aliases', () => {
+    const product = catalogue.products.find((item) => item.supermarketId === 'continente');
+    if (!product) throw new Error('Continente seed product required for validator test.');
+    const result = validateProducts([{ ...product, barcode: '1234567890123', barcodes: ['1234567890123'] }], catalogue.ingredients);
+    expect(result.ok).toBe(true);
+  });
+
+  it('scopes barcode and external product ID uniqueness to each retailer', () => {
+    const first = catalogue.products.find((product) => product.supermarketId === 'continente');
+    const second = catalogue.products.find((product) => product.supermarketId === 'continente' && product.id !== first?.id);
+    if (!first || !second) throw new Error('Two Continente seed products required for validator test.');
+    const shared = { barcode: '1234567890123', externalProductId: 'shared-id' };
+    const result = validateProducts([
+      { ...first, ...shared },
+      { ...second, ...shared, supermarketId: first.supermarketId === 'continente' ? 'pingo_doce' : 'continente' },
+    ], catalogue.ingredients);
+    expect(result.ok).toBe(true);
   });
 });

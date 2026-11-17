@@ -5,10 +5,10 @@ import { catalogue } from '../../lib/catalogue';
 import { computeBasket } from '../../lib/calc/basket';
 import { getBudgetStatus } from '../../lib/calc/budget-status';
 import { formatCents, toCents } from '../../lib/money';
-import { validateRecipeForSlot } from '../../lib/engine/generate';
 import { readSavedCatalogue } from '../../lib/data/product-catalogue';
 import { createWeeklyPlan } from '../../lib/planner/create-plan';
-import { PLAN_STORAGE_KEY } from '../../lib/state/plan-storage';
+import { PLAN_STORAGE_KEY, readSavedPlan } from '../../lib/state/plan-storage';
+import { readApplicationItem, writeApplicationItem } from '../../lib/state/application-storage';
 import { parseWizardSnapshot, toUserProfile, WIZARD_DRAFT_KEY } from '../../lib/state/wizard-reducer';
 import type { Basket, BudgetStatus, Plan, PlanDay, ProductSelection, UserProfile } from '../../lib/types';
 import { categoryLabels, mealLabels, priceStateLabels, supermarketLabels, weekdayLabels } from '../../i18n/labels';
@@ -61,27 +61,6 @@ function create(profile: UserProfile, seed: number, activeCatalogue: typeof cata
   );
 }
 
-function readSavedPlan(raw: string | null, activeCatalogue: typeof catalogue): Plan | null {
-  if (!raw) return null;
-  try {
-    const value: unknown = JSON.parse(raw);
-    if (typeof value !== 'object' || value === null) return null;
-    const plan = value as Partial<Plan>;
-    if (typeof plan.id !== 'string' || !plan.profile || !Array.isArray(plan.days) || plan.days.length !== 7) return null;
-    if (!Number.isInteger(plan.profile.people) || plan.profile.people < 1 || plan.profile.people > 12 || !Array.isArray(plan.profile.mealTypes) || !Array.isArray(plan.profile.allergens) || !Array.isArray(plan.profile.ownedIngredientIds)) return null;
-    const repeats = new Map<string, number>();
-    if (plan.days.some((day) => !day || !Array.isArray(day.slots) || day.slots.some((slot) => {
-      const count = (repeats.get(slot.recipeId) ?? 0) + 1;
-      repeats.set(slot.recipeId, count);
-      return count > 2 || !validateRecipeForSlot(slot.recipeId, slot.mealType, plan.profile as UserProfile, activeCatalogue);
-    }))) return null;
-    if (typeof plan.productOverrides !== 'object' || plan.productOverrides === null || typeof plan.purchased !== 'object' || plan.purchased === null) return null;
-    return plan as Plan;
-  } catch {
-    return null;
-  }
-}
-
 export function PlannerDashboard() {
   const [activeCatalogue, setActiveCatalogue] = useState(catalogue);
   const [plan, setPlan] = useState<Plan | null>(null);
@@ -93,20 +72,20 @@ export function PlannerDashboard() {
   useEffect(() => {
     let loaded: Plan | null = null;
     try {
-      const savedCatalogue = readSavedCatalogue(window.localStorage.getItem('smartbasket:product-catalogue:v1'), catalogue) ?? catalogue;
+      const savedCatalogue = readSavedCatalogue(readApplicationItem(window.localStorage, 'smartbasket:product-catalogue:v1'), catalogue) ?? catalogue;
       // Load user-managed products before validating a saved plan.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveCatalogue(savedCatalogue);
-      loaded = readSavedPlan(window.localStorage.getItem(PLAN_STORAGE_KEY), savedCatalogue);
+      loaded = readSavedPlan(readApplicationItem(window.localStorage, PLAN_STORAGE_KEY), savedCatalogue);
       if (!loaded) {
-        const wizard = parseWizardSnapshot(window.localStorage.getItem(WIZARD_DRAFT_KEY));
+        const wizard = parseWizardSnapshot(readApplicationItem(window.localStorage, WIZARD_DRAFT_KEY));
         const profile = wizard?.completed ? toUserProfile(wizard.draft) : null;
         if (profile) {
-          const seed = Number(window.localStorage.getItem(SEED_STORAGE_KEY) ?? '0');
+          const seed = Number(readApplicationItem(window.localStorage, SEED_STORAGE_KEY) ?? '0');
           const result = create(profile, Number.isSafeInteger(seed) ? seed : 0, savedCatalogue);
           if (result.ok) {
             loaded = result.plan;
-            window.localStorage.setItem(SEED_STORAGE_KEY, String((Number.isSafeInteger(seed) ? seed : 0) + 1));
+            writeApplicationItem(window.localStorage, SEED_STORAGE_KEY, String((Number.isSafeInteger(seed) ? seed : 0) + 1));
           } else {
             // Loading an infeasible generated profile is part of the route bootstrap.
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -127,7 +106,7 @@ export function PlannerDashboard() {
   useEffect(() => {
     if (!plan) return;
     try {
-      window.localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(plan));
+      writeApplicationItem(window.localStorage, PLAN_STORAGE_KEY, JSON.stringify(plan));
     } catch {
       // Calculations remain available for this session even if saving fails.
     }
@@ -138,14 +117,14 @@ export function PlannerDashboard() {
   const budgetCents = plan ? toCents(plan.profile.weeklyBudget) : 0;
   const budgetStatus = basket ? getBudgetStatus(basket, budgetCents) : null;
   const regenerate = (profile: UserProfile) => {
-    const currentSeed = Number(window.localStorage.getItem(SEED_STORAGE_KEY) ?? '0');
+    const currentSeed = Number(readApplicationItem(window.localStorage, SEED_STORAGE_KEY) ?? '0');
     const seed = Number.isSafeInteger(currentSeed) ? currentSeed : 0;
     const result = create(profile, seed, activeCatalogue);
     if (result.ok) {
       setPlan(result.plan);
       setFailure(null);
       setPeopleInput(String(profile.people));
-      try { window.localStorage.setItem(SEED_STORAGE_KEY, String(seed + 1)); } catch { /* Session-only regeneration remains available. */ }
+      try { writeApplicationItem(window.localStorage, SEED_STORAGE_KEY, String(seed + 1)); } catch { /* Session-only regeneration remains available. */ }
     } else {
       setFailure(result.result);
     }

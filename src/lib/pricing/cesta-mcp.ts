@@ -1,231 +1,71 @@
-import type { BaseUnit, PriceObservation, Product, SupermarketId } from '../types';
+import type { RawObservation } from '../data/observations';
+import type { SupermarketId } from '../types';
 
-export type CestaCandidate = {
-  supermarketId: SupermarketId;
-  name: string;
-  packageText: string;
-  price: number;
-  unitPrice?: { amount: number; unit: 'kg' | 'l' | 'un' };
-  promotion?: { regularPrice: number; discountPercent: number | null; validUntil: null };
-  sourceProductId: string;
-  url: string;
-};
+export const CESTA_ENDPOINT = 'https://cesta.pt/mcp';
+export const ALLOWED_CESTA_TOOLS = ['search_products', 'get_product', 'compare_price', 'build_basket', 'whats_on_promo'] as const;
+export type AllowedCestaTool = typeof ALLOWED_CESTA_TOOLS[number];
+export const PROHIBITED_CESTA_TOOLS = ['create_basket', 'add_items_to_basket', 'create_checkout_link'] as const;
 
-export type CestaProductDetails = {
-  supermarketId: SupermarketId;
-  name: string;
-  brand: string | null;
-  price: number | null;
-  available: boolean;
-  barcodes: string[];
-  url: string;
-};
-
-type JsonRpcResult = { result?: { content?: Array<{ type?: string; text?: string }>; isError?: boolean; serverInfo?: { name: string; version: string } }; error?: { message?: string } };
-const ENDPOINT = 'https://cesta.pt/mcp';
-const MCP_PROTOCOL_VERSION = '2025-03-26';
-
-function eventResult(body: string): JsonRpcResult {
-  const data = body.split(/\r?\n/).filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trim()).join('\n');
-  const payload = data || body;
-  try { return JSON.parse(payload) as JsonRpcResult; }
-  catch { throw new Error('A cesta.pt devolveu uma resposta MCP que não foi possível interpretar.'); }
-}
-
-async function rpc(method: string, id: number, params: Record<string, unknown> = {}): Promise<JsonRpcResult> {
-  throw new Error('A integração Cesta está desactivada; não são feitas chamadas externas.');
-  /* const response = await fetch(ENDPOINT, {
-    method: 'POST',
-    mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' },
-    body: JSON.stringify({ jsonrpc: '2.0', id, method, params }),
-  });
+type JsonRpc = { result?: { content?: Array<{ type?: string; text?: string }> }; error?: { message?: string } };
+async function rpc(method: string, id: number, params: Record<string, unknown>): Promise<JsonRpc> {
+  const response = await fetch(CESTA_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' }, body: JSON.stringify({ jsonrpc: '2.0', id, method, params }), signal: AbortSignal.timeout(20_000) });
   if (!response.ok) throw new Error(`A cesta.pt respondeu com o estado ${response.status}.`);
-  const result = eventResult(await response.text());
-  if (result.error) throw new Error(result.error.message ?? 'A cesta.pt devolveu um erro.');
-  if (result.result?.isError) throw new Error(result.result.content?.map((entry) => entry.text ?? '').join('\n') || 'A pesquisa na cesta.pt falhou.');
-  return result; */
+  const body = await response.text();
+  const data = body.split(/\r?\n/).find((line) => line.startsWith('data:'))?.slice(5).trim() ?? body;
+  const parsed = JSON.parse(data) as JsonRpc;
+  if (parsed.error) throw new Error(parsed.error.message ?? 'A cesta.pt devolveu um erro.');
+  return parsed;
 }
 
-async function callTool(name: string, args: Record<string, unknown>): Promise<string> {
-  void name; void args;
-  throw new Error('A integração Cesta está desactivada; não são feitas chamadas externas.');
-  /*
-  const initialized = await rpc('initialize', 1, {
-    protocolVersion: MCP_PROTOCOL_VERSION,
-    capabilities: {},
-    clientInfo: { name: 'SmartBasket', version: '1.0.0' },
-  });
-  if (initialized.result?.serverInfo === undefined) throw new Error('A cesta.pt não confirmou a inicialização MCP.');
-  await fetch(ENDPOINT, {
-    method: 'POST', mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' },
-    body: JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }),
-  });
-  const response = await rpc('tools/call', 2, { name, arguments: args });
-  const content = response.result?.content?.filter((entry) => entry.type === 'text').map((entry) => entry.text ?? '').join('\n');
-  if (!content) throw new Error('A cesta.pt não devolveu informação de produto.');
-  return content; */
+async function callAllowedTool(tool: AllowedCestaTool, args: Record<string, unknown>): Promise<unknown> {
+  if (!ALLOWED_CESTA_TOOLS.includes(tool)) throw new Error('Ferramenta Cesta não permitida.');
+  await rpc('initialize', 1, { protocolVersion: '2025-03-26', capabilities: {}, clientInfo: { name: 'SmartBasket', version: '1.0.0' } });
+  const result = await rpc('tools/call', 2, { name: tool, arguments: args });
+  const text = result.result?.content?.filter((entry) => entry.type === 'text').map((entry) => entry.text ?? '').join('\n') ?? '';
+  if (!text) throw new Error('A cesta.pt não devolveu dados interpretáveis.');
+  try { return JSON.parse(text) as unknown; } catch { return text; }
 }
 
-function parseEuros(input: string): number | null {
-  const match = input.trim().match(/^(\d+(?:[.,]\d{1,2})?)\s*€$/);
-  if (!match?.[1]) return null;
-  const value = Number(match[1].replace(',', '.'));
-  return Number.isFinite(value) && Math.round(value * 100) / 100 === value ? value : null;
+export async function searchCestaObservations(query: string, retailer?: SupermarketId): Promise<RawObservation[]> {
+  const result = await callAllowedTool('search_products', { query, ...(retailer ? { stores: [retailer === 'pingo_doce' ? 'pingodoce' : retailer] } : {}), limit: 6 });
+  return normalizeResults(result, 'search_products');
 }
 
-function supermarketFromLabel(label: string): SupermarketId | null {
-  if (label === 'Continente') return 'continente';
-  if (label === 'Pingo Doce') return 'pingo_doce';
-  return null;
-}
-
-function parseCandidateLine(line: string, urlLine: string): CestaCandidate | null {
-  const normalized = line.trim().replace(/^-\s*/, '');
-  const idMatch = normalized.match(/\s+·\s+pid\s+([\w-]+)\s*$/);
-  if (!idMatch?.[1]) return null;
-  const body = normalized.slice(0, idMatch.index).split(' · ');
-  if (body.length < 3 || !body[0]) return null;
-  const firstDot = body[0].indexOf(' · ');
-  if (firstDot < 0) return null;
-  const supermarketId = supermarketFromLabel(body[0].slice(0, firstDot));
-  const name = body[0].slice(firstDot + 3).trim();
-  const priceIndex = body.findIndex((part) => /^\d+[,.]\d{1,2}\s*€/.test(part));
-  if (!supermarketId || !name || priceIndex < 2) return null;
-  const priceToken = body[priceIndex] ?? '';
-  const promoMatch = priceToken.match(/^(\d+[,.]\d{1,2})\s*€\s*\(antes\s+(\d+[,.]\d{1,2})\s*€,\s*(-?\d+)%\)$/i);
-  const price = parseEuros(promoMatch ? `${promoMatch[1]}€` : priceToken);
-  if (price === null) return null;
-  const packageText = body[1]?.trim() ?? '';
-  const unitToken = body.slice(priceIndex + 1).find((part) => /^\d+[,.]\d{1,2}\s*€\/(kg|lt|l|un)$/i.test(part));
-  let unitPrice: CestaCandidate['unitPrice'];
-  const unitMatch = unitToken?.match(/^(\d+[,.]\d{1,2})\s*€\/(kg|lt|l|un)$/i);
-  if (unitMatch?.[1] && unitMatch[2]) unitPrice = { amount: Number(unitMatch[1].replace(',', '.')), unit: unitMatch[2].toLowerCase() === 'kg' ? 'kg' : unitMatch[2].toLowerCase() === 'un' ? 'un' : 'l' };
-  const url = urlLine.trim();
-  let parsedUrl: URL;
-  try { parsedUrl = new URL(url); } catch { return null; }
-  const expectedHost = supermarketId === 'continente' ? 'continente.pt' : 'pingodoce.pt';
-  if (!(parsedUrl.hostname === expectedHost || parsedUrl.hostname.endsWith(`.${expectedHost}`))) return null;
-  return {
-    supermarketId, name, packageText, price, sourceProductId: idMatch[1], url,
-    ...(unitPrice ? { unitPrice } : {}),
-    ...(promoMatch?.[2] ? { promotion: { regularPrice: Number(promoMatch[2].replace(',', '.')), discountPercent: Number(promoMatch[3]), validUntil: null } } : {}),
-  };
-}
-
-export function parseCestaSearchResults(text: string, supermarketId: SupermarketId): CestaCandidate[] {
+export function parseCestaText(text: string, observedAt: string): RawObservation[] {
+  const observations: RawObservation[] = [];
+  const pattern = new RegExp(`^-\\s*(Continente|Pingo Doce)\\s+\\u00b7\\s+(.+?)\\s+\\u00b7\\s+(?:emb\\.\\s+)?([^\\u00b7]+?)\\s+\\u00b7\\s+(\\d+[,.]\\d{1,2})\\u20ac(?:\\s+\\(antes\\s+(\\d+[,.]\\d{1,2})\\u20ac,\\s*(-?\\d+)%\\))?(?:\\s+\\u00b7\\s+(\\d+[,.]\\d{1,2})\\u20ac\\/(kg|l|un))?\\s+\\u00b7\\s+pid\\s+([\\w-]+)\\s*$`, 'i');
   const lines = text.split(/\r?\n/);
-  const candidates: CestaCandidate[] = [];
   for (let index = 0; index < lines.length; index += 1) {
-    const line = lines[index] ?? '';
-    if (!line.trimStart().startsWith('-')) continue;
-    const urlLine = lines[index + 1] ?? '';
-    const candidate = parseCandidateLine(line, urlLine);
-    if (candidate?.supermarketId === supermarketId) candidates.push(candidate);
+    const match = lines[index]?.match(pattern);
+    const url = lines[index + 1]?.trim();
+    if (!match || !url) continue;
+    const retailer = match[1]?.toLowerCase() === 'continente' ? 'continente' : 'pingo_doce';
+    observations.push({ id: `cesta-search-${retailer}-${match[9]}`, source: 'cesta_mcp', retailer, sourceProductId: match[9] ?? null, ean: null, name: match[2]?.trim() ?? null, brand: null, package: { size: parsePackageSize(match[3] ?? ''), unit: parsePackageUnit(match[3] ?? ''), text: match[3]?.trim() ?? null, fixed: true }, price: { amount: parseDecimal(match[4]), currency: 'EUR', unitAmount: parseDecimal(match[7]), unit: match[8] === 'kg' || match[8] === 'l' || match[8] === 'un' ? match[8] : null, promotionalAmount: match[6] ? parseDecimal(match[4]) : null, originalAmount: parseDecimal(match[5]) }, sourceUrl: url, observedAt, raw: { text: lines[index], url }, retrievalError: null, ingredients: null, allergens: 'unknown', nutrition: null, dietaryCompatibility: null, reviewStatus: 'pending' });
   }
-  return candidates;
+  return observations;
 }
 
-export async function searchCestaProducts(query: string, supermarketId: SupermarketId): Promise<CestaCandidate[]> {
-  const text = await callTool('search_products', { query, stores: [supermarketId === 'continente' ? 'continente' : 'pingodoce'], limit: 6 });
-  const candidates = parseCestaSearchResults(text, supermarketId);
-  if (!candidates.length && /não encontrou|sem resultados|não existe/i.test(text)) return [];
-  if (!candidates.length) throw new Error('A resposta da cesta.pt mudou ou não contém produtos interpretáveis; nenhum dado foi guardado.');
-  return candidates;
+function normalizeResults(result: unknown, sourceTool: string): RawObservation[] {
+  const now = new Date().toISOString();
+  if (typeof result === 'string') return parseCestaText(result, now);
+  const values = Array.isArray(result) ? result : record(result).products ?? record(result).results ?? record(result).items ?? [result];
+  return (Array.isArray(values) ? values : [values]).filter((value) => typeof value === 'object' && value !== null).map((value, index) => observationFromCesta(record(value), now, sourceTool, index));
 }
 
-export function parseCestaProductDetails(text: string, expected: CestaCandidate): CestaProductDetails {
-  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-  const first = lines[0] ?? '';
-  const supermarketLabel = expected.supermarketId === 'continente' ? 'Continente' : 'Pingo Doce';
-  if (!first.startsWith(`${supermarketLabel} · `) || !first.includes(`pid ${expected.sourceProductId}`)) throw new Error('Os detalhes devolvidos não correspondem ao produto selecionado.');
-  const name = first.slice(`${supermarketLabel} · `.length).replace(/\s*\(pid\s+[\w-]+\)\s*$/, '').trim();
-  const getValue = (label: string) => lines.find((line) => line.startsWith(`${label}:`))?.slice(label.length + 1).trim() ?? null;
-  const brand = getValue('Marca');
-  const priceText = getValue('Preço');
-  const availableText = getValue('Disponível');
-  const url = lines.find((line) => line.startsWith('https://')) ?? '';
-  const price = priceText ? parseEuros(priceText) : null;
-  if (!name || !availableText || !/^sim|não$/i.test(availableText) || !url) throw new Error('Os detalhes da cesta.pt não incluem os campos mínimos esperados.');
-  const parsedUrl = new URL(url);
-  const expectedHost = expected.supermarketId === 'continente' ? 'continente.pt' : 'pingodoce.pt';
-  if (!(parsedUrl.hostname === expectedHost || parsedUrl.hostname.endsWith(`.${expectedHost}`))) throw new Error('A ligação devolvida não pertence ao supermercado esperado.');
-  if (availableText.toLowerCase() === 'sim' && price === null) throw new Error('O produto está disponível, mas a resposta não contém um preço válido.');
-  const eanText = getValue('EAN');
-  const barcodes = eanText ? eanText.split('|').map((code) => code.trim()).filter((code) => /^\d{8,14}$/.test(code)) : [];
-  return { supermarketId: expected.supermarketId, name, brand, price, available: availableText.toLowerCase() === 'sim', barcodes, url };
+function parseDecimal(value: string | undefined): number | null { return value ? Number(value.replace(',', '.')) : null; }
+function parsePackageSize(value: string): number | null { const match = value.match(/(\d+(?:[,.]\d+)?)\s*(kg|g|l|ml|un)/i); if (!match?.[1] || !match[2]) return null; const amount = Number(match[1].replace(',', '.')); return match[2].toLowerCase() === 'kg' || match[2].toLowerCase() === 'l' ? amount * 1000 : amount; }
+function parsePackageUnit(value: string): 'g' | 'ml' | 'un' | null { const match = value.match(/\d+(?:[,.]\d+)?\s*(kg|g|l|ml|un)/i); if (!match?.[1]) return null; const unit = match[1].toLowerCase(); return unit === 'kg' || unit === 'g' ? 'g' : unit === 'l' || unit === 'ml' ? 'ml' : 'un'; }
+
+function observationFromCesta(value: Record<string, unknown>, observedAt: string, sourceTool: string, index: number): RawObservation {
+  const retailer = retailerId(value.retailer ?? value.store ?? value.supermarket);
+  const price = number(value.price ?? value.current_price);
+  const unitPrice = record(value.unitPrice ?? value.unit_price);
+  return { id: `cesta-${sourceTool}-${text(value.id ?? value.pid) ?? index}-${observedAt}`, source: 'manual_import', retailer, sourceProductId: text(value.id ?? value.pid), ean: text(value.ean ?? value.gtin ?? value.barcode), name: text(value.name ?? value.product_name), brand: text(value.brand), package: { size: number(record(value.package).size ?? value.packageSize ?? value.pack_size), unit: baseUnit(record(value.package).unit ?? value.packageUnit ?? value.unit), text: text(record(value.package).text ?? value.package_text), fixed: null }, price: { amount: price, currency: text(value.currency) ?? 'EUR', unitAmount: number(unitPrice.amount), unit: priceUnit(unitPrice.unit), promotionalAmount: number(record(value.promotion).price ?? value.promo_price), originalAmount: number(record(value.promotion).regularPrice ?? value.original_price) }, sourceUrl: text(value.url ?? value.product_url), observedAt, raw: value, retrievalError: null, ingredients: text(value.ingredients), allergens: value.allergens === 'unknown' || Array.isArray(value.allergens) ? value.allergens : 'unknown', nutrition: value.nutrition ?? null, dietaryCompatibility: null, reviewStatus: 'pending' };
 }
 
-export async function getCestaProductDetails(candidate: CestaCandidate): Promise<CestaProductDetails> {
-  const text = await callTool('get_product', { store: candidate.supermarketId === 'continente' ? 'continente' : 'pingodoce', pid: candidate.sourceProductId });
-  return parseCestaProductDetails(text, candidate);
-}
-
-function parsePackSize(text: string, fallbackUnit: BaseUnit): { packSize: number; unit: BaseUnit } | null {
-  const normalized = text.toLowerCase().replace(/^emb\.\s*/, '').replace(',', '.');
-  const multipack = normalized.match(/(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*(kg|g|lt|l|ml|un|unidades?)/i);
-  const single = multipack ?? normalized.match(/(\d+(?:\.\d+)?)\s*(kg|g|lt|l|ml|un|unidades?)/i);
-  if (!single) return null;
-  const first = Number(single[1]);
-  const isMultipack = Boolean(multipack);
-  const amount = first * (isMultipack ? Number(single[2]) : 1);
-  const unitText = (isMultipack ? single[3] : single[2])?.toLowerCase();
-  if (!Number.isFinite(amount) || amount <= 0 || !unitText) return null;
-  if (unitText === 'kg') return { packSize: amount * 1000, unit: 'g' };
-  if (unitText === 'g') return { packSize: amount, unit: 'g' };
-  if (unitText === 'l' || unitText === 'lt') return { packSize: amount * 1000, unit: 'ml' };
-  if (unitText === 'ml') return { packSize: amount, unit: 'ml' };
-  if (unitText === 'un' || unitText === 'unidade' || unitText === 'unidades') return { packSize: amount, unit: 'un' };
-  return { packSize: amount, unit: fallbackUnit };
-}
-
-export function observedProductFromCesta(
-  ingredientProduct: Product,
-  candidate: CestaCandidate,
-  details: CestaProductDetails,
-  checkedAt: string,
-  checkedDate: string,
-): Product {
-  if (candidate.supermarketId !== ingredientProduct.supermarketId || details.supermarketId !== ingredientProduct.supermarketId) throw new Error('O supermercado do produto consultado não corresponde à entrada selecionada.');
-  if (candidate.sourceProductId === '' || details.name === '') throw new Error('A resposta da cesta.pt não identificou o produto.');
-  const packageText = candidate.packageText || details.name;
-  const parsedPack = parsePackSize(packageText, ingredientProduct.unit);
-  if (!parsedPack || parsedPack.unit !== ingredientProduct.unit) throw new Error('Não foi possível interpretar o tamanho da embalagem; o produto não foi guardado.');
-  const available = details.available && details.price !== null;
-  const observation: PriceObservation = {
-    provider: 'cesta_mcp', sourceProductId: candidate.sourceProductId, checkedAt, checkedDate, currency: 'EUR',
-    availability: available ? 'available' : 'unavailable',
-    ...(candidate.unitPrice ? { unitPrice: candidate.unitPrice } : {}),
-    ...(candidate.promotion ? { promotion: candidate.promotion } : {}),
-  };
-  const product: Product = {
-    ...ingredientProduct,
-    id: `cesta-${ingredientProduct.supermarketId}-${candidate.sourceProductId}`,
-    name: details.name,
-    supermarketId: details.supermarketId,
-    packSize: parsedPack.packSize,
-    unit: parsedPack.unit,
-    price: available ? details.price : null,
-    priceState: available ? 'observado' : 'desconhecido',
-    priceUpdatedAt: available ? checkedDate : null,
-    estimate: undefined,
-    promo: undefined,
-    brand: details.brand,
-    productUrl: details.url,
-    barcode: details.barcodes[0] ?? null,
-    barcodes: details.barcodes,
-    externalProductId: candidate.sourceProductId,
-    availability: available ? 'available' : 'unavailable',
-    ...(candidate.unitPrice ? { unitPrice: candidate.unitPrice } : { unitPrice: undefined }),
-    priceObservation: observation,
-    catalogueSource: 'cesta_mcp',
-    allergens: 'unknown',
-    dietCompatibility: { vegetariana: 'desconhecido', vegana: 'desconhecido', sem_gluten: 'desconhecido', sem_lactose: 'desconhecido' },
-  };
-  return product;
-}
-
-export function lisbonDate(isoTimestamp: string): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Lisbon', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(isoTimestamp));
-}
+function record(value: unknown): Record<string, unknown> { return typeof value === 'object' && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
+function text(value: unknown): string | null { return typeof value === 'string' && value.trim() ? value.trim() : null; }
+function number(value: unknown): number | null { const n = typeof value === 'number' ? value : typeof value === 'string' ? Number(value.replace(',', '.')) : NaN; return Number.isFinite(n) ? n : null; }
+function retailerId(value: unknown): SupermarketId | null { const textValue = text(value)?.toLowerCase(); return textValue === 'continente' ? 'continente' : textValue === 'pingodoce' || textValue === 'pingo_doce' || textValue === 'pingo doce' ? 'pingo_doce' : null; }
+function baseUnit(value: unknown): 'g' | 'ml' | 'un' | null { return value === 'g' || value === 'ml' || value === 'un' ? value : null; }
+function priceUnit(value: unknown): 'kg' | 'l' | 'un' | null { return value === 'kg' || value === 'l' || value === 'un' ? value : null; }

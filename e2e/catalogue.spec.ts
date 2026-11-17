@@ -19,7 +19,10 @@ test('user can add an unknown-price local product without asserting unsafe data'
   await expect(page.getByText('Produto local para demonstração')).toBeVisible();
   await expect(page.getByText('Marca introduzida pelo utilizador')).toBeVisible();
   await expect(page.getByText('Preço desconhecido').last()).toBeVisible();
-  const saved = await page.evaluate(() => JSON.parse(window.localStorage.getItem('smartbasket:product-catalogue:v1') ?? 'null'));
+  const saved = await page.evaluate(() => {
+    const envelope = JSON.parse(window.localStorage.getItem('smartbasket:application:v1') ?? '{"data":{}}') as { data: Record<string, string | null> };
+    return JSON.parse(envelope.data['smartbasket:product-catalogue:v1'] ?? 'null');
+  });
   const product = saved.products.find((item: { name: string }) => item.name === 'Produto local para demonstração');
   expect(product.priceState).toBe('desconhecido');
   expect(product.price).toBeNull();

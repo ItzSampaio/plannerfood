@@ -57,7 +57,7 @@ export function approveObservation(catalogue: Catalogue, observation: RawObserva
   if (review.fields.includes('source')) { next.productUrl = observation.sourceUrl; next.externalProductId = observation.sourceProductId; }
   if (review.fields.includes('price') && observation.source !== 'open_food_facts' && observation.price.amount !== null && observation.price.currency === 'EUR') {
     next.price = observation.price.amount; next.priceState = 'observado'; next.priceUpdatedAt = observation.observedAt.slice(0, 10);
-    next.priceObservation = observation.source === 'scrapling' ? { provider: 'scrapling', sourceProductId: observation.sourceProductId ?? observation.id, checkedAt: observation.observedAt, checkedDate: observation.observedAt.slice(0, 10), currency: 'EUR', availability: 'available' } : undefined;
+    if (observation.source === 'scrapling' || observation.source === 'cesta_mcp') next.priceObservation = { provider: observation.source, sourceProductId: observation.sourceProductId ?? observation.id, checkedAt: observation.observedAt, checkedDate: observation.observedAt.slice(0, 10), currency: 'EUR', availability: 'available', ...(observation.price.unitAmount !== null && observation.price.unit ? { unitPrice: { amount: observation.price.unitAmount, unit: observation.price.unit } } : {}) };
   }
   const before = target ? snapshot(target) : {};
   const after = snapshot(next);

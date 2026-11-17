@@ -11,6 +11,7 @@ import { validateRecipeForSlot } from '../../src/lib/engine/generate';
 import { createWeeklyPlan } from '../../src/lib/planner/create-plan';
 import type { UserProfile } from '../../src/lib/types';
 import { WIZARD_DRAFT_KEY } from '../../src/lib/state/wizard-reducer';
+import { readApplicationItem } from '../../src/lib/state/application-storage';
 
 const routeParams = vi.hoisted(() => ({ id: '' }));
 vi.mock('next/navigation', () => ({ useParams: () => ({ id: routeParams.id }) }));
@@ -103,8 +104,8 @@ describe('Phase 5 real plan and results flow', () => {
     expect(container.querySelectorAll('.day-card')).toHaveLength(7);
     const mealLink = container.querySelector<HTMLAnchorElement>('.meal-card');
     expect(mealLink?.getAttribute('href')).toMatch(/^\/plan\/refeicao\//);
-    expect(window.localStorage.getItem(PLAN_STORAGE_KEY)).not.toBeNull();
-    const storedPlan = JSON.parse(window.localStorage.getItem(PLAN_STORAGE_KEY) ?? 'null') as { days: { slots: { recipeId: string }[] }[] };
+    expect(readApplicationItem(window.localStorage, PLAN_STORAGE_KEY)).not.toBeNull();
+    const storedPlan = JSON.parse(readApplicationItem(window.localStorage, PLAN_STORAGE_KEY) ?? 'null') as { days: { slots: { recipeId: string }[] }[] };
     routeParams.id = storedPlan.days[0]?.slots[0]?.recipeId ?? '';
     if (root) await act(async () => { root?.unmount(); });
     root = null;
@@ -126,7 +127,7 @@ describe('Phase 5 real plan and results flow', () => {
     const purchase = results.querySelector<HTMLInputElement>('.shopping-check input:not(:disabled)');
     expect(purchase).not.toBeNull();
     await act(async () => { purchase?.click(); });
-    expect(window.localStorage.getItem(PLAN_STORAGE_KEY)).toContain('"purchased"');
+    expect(readApplicationItem(window.localStorage, PLAN_STORAGE_KEY)).toContain('"purchased"');
     if (root) await act(async () => { root?.unmount(); });
     root = null;
     host?.remove();
@@ -148,7 +149,7 @@ describe('Phase 5 real plan and results flow', () => {
     });
     await clickButton(reopenedResults, 'Recalcular plano');
     expect(reopenedResults.textContent).toContain('4 Pessoas');
-    const updatedPlan = JSON.parse(window.localStorage.getItem(PLAN_STORAGE_KEY) ?? 'null') as { profile?: { people?: number } } | null;
+    const updatedPlan = JSON.parse(readApplicationItem(window.localStorage, PLAN_STORAGE_KEY) ?? 'null') as { profile?: { people?: number } } | null;
     expect(updatedPlan?.profile?.people).toBe(4);
   });
 });

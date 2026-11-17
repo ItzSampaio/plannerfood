@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { catalogue } from '../../src/lib/catalogue';
 import { observationIsStale, parseObservationImport, suggestObservationMatches, type RawObservation } from '../../src/lib/data/observations';
 import { observationFromOpenFoodFacts, observationFromOpenPrices, observationFromScraplingCollector } from '../../src/lib/data/source-adapters';
+import { ALLOWED_CESTA_TOOLS, PROHIBITED_CESTA_TOOLS, parseCestaText } from '../../src/lib/pricing/cesta-mcp';
 import { approveObservation, type ObservationReview } from '../../src/lib/data/observation-approval';
 
 const observation = (overrides: Partial<RawObservation> = {}): RawObservation => ({
@@ -92,5 +93,12 @@ describe('source-neutral product observations', () => {
     expect(result.price.unitAmount).toBe(0.24);
     expect(result.allergens).toBe('unknown');
     expect(result.reviewStatus).toBe('pending');
+  });
+
+  it('parses Cesta read-only search text and keeps prohibited tools outside the allowlist', () => {
+    const result = parseCestaText('- Continente · Arroz Agulha Continente · emb. 1 kg · 1,15€ · pid 6927230\n  https://www.continente.pt/produto/arroz-agulha-continente-6927230.html', '2026-11-17T20:00:00.000Z');
+    expect(result[0]).toMatchObject({ source: 'cesta_mcp', retailer: 'continente', sourceProductId: '6927230', price: { amount: 1.15 }, package: { size: 1000, unit: 'g' }, reviewStatus: 'pending' });
+    expect(ALLOWED_CESTA_TOOLS).toEqual(['search_products', 'get_product', 'compare_price', 'build_basket', 'whats_on_promo']);
+    expect(PROHIBITED_CESTA_TOOLS).toEqual(['create_basket', 'add_items_to_basket', 'create_checkout_link']);
   });
 });

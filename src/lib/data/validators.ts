@@ -177,6 +177,8 @@ export function validateProducts(input: unknown, ingredientInput: unknown): Vali
   const ingredients = ingredientInput as Ingredient[];
   const ingredientMap = new Map(ingredients.map((ingredient) => [ingredient.id, ingredient]));
   uniqueIds(input, 'products', errors);
+  const barcodeOwners = new Map<string, number>();
+  const externalOwners = new Map<string, number>();
   input.forEach((value, index) => {
     const path = `products[${index}]`;
     if (!isRecord(value)) { add(errors, 'record.invalid', path, 'Expected a product object.'); return; }
@@ -202,9 +204,24 @@ export function validateProducts(input: unknown, ingredientInput: unknown): Vali
     if (value.barcode !== undefined && value.barcode !== null && (typeof value.barcode !== 'string' || !/^\d{8,14}$/.test(value.barcode))) add(errors, 'barcode.invalid', `${path}.barcode`, 'Barcode must contain 8 to 14 digits when provided.');
     if (value.catalogueSource !== undefined && !['generic_seed', 'user', 'open_prices', 'cesta_mcp', 'scrapling'].includes(String(value.catalogueSource))) add(errors, 'catalogue_source.invalid', `${path}.catalogueSource`, 'Unknown catalogue source.');
     if (value.barcodes !== undefined && (!Array.isArray(value.barcodes) || value.barcodes.some((code) => typeof code !== 'string' || !/^\d{8,14}$/.test(code)))) add(errors, 'barcodes.invalid', `${path}.barcodes`, 'Barcodes must be valid EAN digit strings.');
+    const identifiers = [
+      ...(typeof value.barcode === 'string' && /^\d{8,14}$/.test(value.barcode) ? [{ code: value.barcode, path: `${path}.barcode` }] : []),
+      ...(Array.isArray(value.barcodes) ? value.barcodes.flatMap((code, barcodeIndex) => typeof code === 'string' && /^\d{8,14}$/.test(code) ? [{ code, path: `${path}.barcodes[${barcodeIndex}]` }] : []) : []),
+    ];
+    for (const { code: barcode, path: barcodePath } of identifiers) {
+      const owner = barcodeOwners.get(`${value.supermarketId}:${barcode}`);
+      if (owner !== undefined && owner !== index) add(errors, 'barcode.duplicate', barcodePath, `EAN ${barcode} is already assigned to another product for this retailer.`);
+      else barcodeOwners.set(`${value.supermarketId}:${barcode}`, index);
+    }
     if (value.imageUrl !== undefined && value.imageUrl !== null && !isWebUrl(value.imageUrl)) add(errors, 'image_url.invalid', `${path}.imageUrl`, 'Image URL must be HTTP(S).');
     if (value.imageSourceUrl !== undefined && value.imageSourceUrl !== null && !isWebUrl(value.imageSourceUrl)) add(errors, 'image_source_url.invalid', `${path}.imageSourceUrl`, 'Image source URL must be HTTP(S).');
     if (value.externalProductId !== undefined && value.externalProductId !== null && (typeof value.externalProductId !== 'string' || !value.externalProductId.trim())) add(errors, 'external_product_id.invalid', `${path}.externalProductId`, 'External product ID must be non-empty text.');
+    if (typeof value.externalProductId === 'string' && value.externalProductId.trim()) {
+      const key = `${value.supermarketId}:${value.externalProductId}`;
+      const owner = externalOwners.get(key);
+      if (owner !== undefined && owner !== index) add(errors, 'external_product_id.duplicate', `${path}.externalProductId`, 'External product ID is already assigned to another product for this retailer.');
+      else externalOwners.set(key, index);
+    }
     if (value.availability !== undefined && !['available', 'unavailable'].includes(String(value.availability))) add(errors, 'availability.invalid', `${path}.availability`, 'Unknown product availability state.');
     if (value.unitPrice !== undefined && (!isRecord(value.unitPrice) || !finiteNonNegative(value.unitPrice.amount) || !hasCentsPrecision(value.unitPrice.amount) || !['kg', 'l', 'un'].includes(String(value.unitPrice.unit)))) add(errors, 'unit_price.invalid', `${path}.unitPrice`, 'Unit price must have a valid amount and denominator unit.');
     if (value.priceHistory !== undefined) {

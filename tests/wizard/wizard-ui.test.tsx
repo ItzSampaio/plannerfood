@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { SetupWizard } from '../../src/components/wizard/setup-wizard';
 import { PlannerDashboard } from '../../src/components/planner/planner-dashboard';
 import { WIZARD_DRAFT_KEY } from '../../src/lib/state/wizard-reducer';
+import { readApplicationItem } from '../../src/lib/state/application-storage';
 
 let root: Root | null = null;
 let host: HTMLDivElement | null = null;
@@ -81,7 +82,7 @@ describe('setup wizard interface', () => {
     expect(container.textContent).toContain('145,50');
     await clickButton(container, 'Guardar');
     expect(container.textContent).toContain('guardadas neste dispositivo.');
-    const saved = window.localStorage.getItem(WIZARD_DRAFT_KEY);
+    const saved = readApplicationItem(window.localStorage, WIZARD_DRAFT_KEY);
     expect(saved).not.toBeNull();
     expect(saved).toContain('"peopleInput":"6"');
     expect(saved).toContain('"weeklyBudgetInput":"145,50"');

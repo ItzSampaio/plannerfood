@@ -12,10 +12,13 @@ import {
 import { allergenLabels, categoryLabels, dietTagLabels, priceStateLabels, supermarketLabels, baseUnitLabels } from '../../i18n/labels';
 import { ptPT } from '../../i18n/pt-PT';
 import { toCents } from '../../lib/money';
-import { getCestaProductDetails, lisbonDate, observedProductFromCesta, searchCestaProducts, type CestaCandidate } from '../../lib/pricing/cesta-mcp';
+import { searchCestaObservations } from '../../lib/pricing/cesta-mcp';
 import { parseObservationImport, suggestObservationMatches, type RawObservation } from '../../lib/data/observations';
 import { observationFromScraplingCollector } from '../../lib/data/source-adapters';
 import { approveObservation, type ApprovalAction, type ObservationReview } from '../../lib/data/observation-approval';
+import { observationRejectedEvent, productAuditEvents } from '../../lib/data/audit';
+import { OBSERVATIONS_STORAGE_KEY, OBSERVATION_AUDIT_STORAGE_KEY, PRODUCT_AUDIT_STORAGE_KEY } from '../../lib/data/application-backup';
+import { readAllApplicationItems, readApplicationItem, writeAllApplicationItems, writeApplicationItem } from '../../lib/state/application-storage';
 
 type PriceForm = {
   priceInput: string;
@@ -25,11 +28,9 @@ type PriceForm = {
   verifiedConfirmed: boolean;
 };
 type Feedback = { kind: 'success' | 'error'; message: string } | null;
-type CestaSearch = { productId: string; candidates: CestaCandidate[]; loading: boolean; message?: string };
 const SUPERMARKETS: SupermarketId[] = ['continente', 'pingo_doce'];
 const DIET_TAGS: DietTag[] = ['vegetariana', 'vegana', 'sem_gluten', 'sem_lactose'];
-const OBSERVATIONS_STORAGE_KEY = 'smartbasket:product-observations:v1';
-const OBSERVATION_AUDIT_STORAGE_KEY = 'smartbasket:observation-audit:v1';
+function lisbonDate(iso: string): string { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Lisbon', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso)); }
 
 type ScraplingCandidateReview = {
   id: string;
@@ -120,6 +121,7 @@ function priceHistoryText(entry: PriceHistoryEntry): string {
 function observationSourceLabel(source: RawObservation['source']): string {
   switch (source) {
     case 'scrapling': return 'Scrapling';
+    case 'cesta_mcp': return 'cesta.pt';
     case 'open_food_facts': return 'Open Food Facts';
     case 'open_prices': return 'Open Prices';
     case 'manual_import': return 'Importação manual';
@@ -137,6 +139,8 @@ export function ProductCatalogueManager() {
   const [products, setProducts] = useState<Product[]>(seedCatalogue.products);
   const [ready, setReady] = useState(false);
   const [supermarket, setSupermarket] = useState<SupermarketId | 'todos'>('todos');
+  const [category, setCategory] = useState<string>('todos');
+  const [qualityFilter, setQualityFilter] = useState<'todos' | 'real' | 'incompleto' | 'preco_desconhecido'>('todos');
   const [query, setQuery] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
@@ -147,9 +151,10 @@ export function ProductCatalogueManager() {
   const [verifiedImportConfirmed, setVerifiedImportConfirmed] = useState(false);
   const [historyOpenId, setHistoryOpenId] = useState<string | null>(null);
   const [scraplingReview, setScraplingReview] = useState<ScraplingReviewState | null>(null);
-  const [cestaSearch, setCestaSearch] = useState<CestaSearch | null>(null);
   const [observations, setObservations] = useState<RawObservation[]>([]);
   const [observationFile, setObservationFile] = useState<File | null>(null);
+  const [cestaQuery, setCestaQuery] = useState('');
+  const [cestaLoading, setCestaLoading] = useState(false);
   const [approval, setApproval] = useState<{ id: string; action: ApprovalAction; targetProductId?: string } | null>(null);
   const [approvalIngredient, setApprovalIngredient] = useState(seedCatalogue.ingredients[0]?.id ?? '');
   const [approvalPackageSize, setApprovalPackageSize] = useState('');
@@ -158,11 +163,11 @@ export function ProductCatalogueManager() {
 
   useEffect(() => {
     try {
-      const saved = readSavedCatalogue(window.localStorage.getItem(PRODUCT_CATALOGUE_STORAGE_KEY), seedCatalogue);
+      const saved = readSavedCatalogue(readApplicationItem(window.localStorage, PRODUCT_CATALOGUE_STORAGE_KEY), seedCatalogue);
       // localStorage is read after hydration to keep server and client markup identical.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setProducts(saved.products);
-      const savedObservations = window.localStorage.getItem(OBSERVATIONS_STORAGE_KEY);
+      const savedObservations = readApplicationItem(window.localStorage, OBSERVATIONS_STORAGE_KEY);
       if (savedObservations) {
         const parsed = parseObservationImport(JSON.parse(savedObservations));
         if (parsed.ok) setObservations(parsed.observations);
@@ -173,17 +178,27 @@ export function ProductCatalogueManager() {
 
   const filteredProducts = useMemo(() => products.filter((product) =>
     (supermarket === 'todos' || product.supermarketId === supermarket)
+    && (category === 'todos' || seedCatalogue.ingredients.find((ingredient) => ingredient.id === product.ingredientId)?.category === category)
+    && (qualityFilter === 'todos' || qualityFilter === 'real' && product.catalogueSource !== 'generic_seed' || qualityFilter === 'incompleto' && (product.allergens === 'unknown' || Object.values(product.dietCompatibility).some((value) => value === 'desconhecido')) || qualityFilter === 'preco_desconhecido' && product.priceState === 'desconhecido')
     && `${product.name} ${product.brand ?? ''} ${product.ingredientId}`.toLocaleLowerCase('pt-PT').includes(query.trim().toLocaleLowerCase('pt-PT')),
-  ).sort((left, right) => supermarketLabels[left.supermarketId].localeCompare(supermarketLabels[right.supermarketId]) || left.name.localeCompare(right.name)), [products, query, supermarket]);
+  ).sort((left, right) => supermarketLabels[left.supermarketId].localeCompare(supermarketLabels[right.supermarketId]) || left.name.localeCompare(right.name)), [products, query, supermarket, category, qualityFilter]);
 
-  const persistProducts = (nextProducts: Product[]) => {
+  const persistProducts = (nextProducts: Product[], additionalData: Record<string, string | null> = {}) => {
     const checked = validateCatalogue({ ...seedCatalogue, products: nextProducts });
     if (!checked.ok) {
       setFeedback({ kind: 'error', message: `${ptPT.catalogueValidationError} (${checked.errors.length})` });
       return false;
     }
     try {
-      window.localStorage.setItem(PRODUCT_CATALOGUE_STORAGE_KEY, serializeSavedCatalogue(nextProducts));
+      const data = readAllApplicationItems(window.localStorage);
+      const auditRaw = data[PRODUCT_AUDIT_STORAGE_KEY] ?? null;
+      const audit: unknown = auditRaw ? JSON.parse(auditRaw) as unknown : [];
+      if (!Array.isArray(audit)) throw new Error('O histórico de alterações está inválido.');
+      const changes = productAuditEvents(products as unknown as Record<string, unknown>[], nextProducts as unknown as Record<string, unknown>[], new Date().toISOString(), 'Catálogo local');
+      data[PRODUCT_CATALOGUE_STORAGE_KEY] = serializeSavedCatalogue(nextProducts);
+      if (changes.length) data[PRODUCT_AUDIT_STORAGE_KEY] = JSON.stringify([...audit, ...changes]);
+      Object.assign(data, additionalData);
+      writeAllApplicationItems(window.localStorage, data);
       setProducts(nextProducts);
       setFeedback({ kind: 'success', message: ptPT.catalogueSaved });
       return true;
@@ -194,8 +209,8 @@ export function ProductCatalogueManager() {
   };
 
   const persistObservations = (next: RawObservation[]) => {
+    writeApplicationItem(window.localStorage, OBSERVATIONS_STORAGE_KEY, JSON.stringify({ version: 1, observations: next }));
     setObservations(next);
-    window.localStorage.setItem(OBSERVATIONS_STORAGE_KEY, JSON.stringify({ version: 1, observations: next }));
   };
 
   const importObservations = async () => {
@@ -216,7 +231,34 @@ export function ProductCatalogueManager() {
     } catch { setFeedback({ kind: 'error', message: 'O ficheiro de observações não contém JSON válido.' }); }
   };
 
-  const rejectObservation = (id: string) => persistObservations(observations.map((observation) => observation.id === id ? { ...observation, reviewStatus: 'rejected' } : observation));
+  const rejectObservation = (id: string) => {
+    const observation = observations.find((item) => item.id === id);
+    if (!observation || observation.reviewStatus !== 'pending') return;
+    try {
+      const data = readAllApplicationItems(window.localStorage);
+      const raw = data[PRODUCT_AUDIT_STORAGE_KEY] ?? null;
+      const audit: unknown = raw ? JSON.parse(raw) as unknown : [];
+      if (!Array.isArray(audit)) throw new Error('O histórico de alterações está inválido.');
+      const nextObservations = observations.map((item) => item.id === id ? { ...item, reviewStatus: 'rejected' as const } : item);
+      data[PRODUCT_AUDIT_STORAGE_KEY] = JSON.stringify([...audit, observationRejectedEvent(observation, new Date().toISOString())]);
+      data[OBSERVATIONS_STORAGE_KEY] = JSON.stringify({ version: 1, observations: nextObservations });
+      writeAllApplicationItems(window.localStorage, data);
+      setObservations(nextObservations);
+    } catch { setFeedback({ kind: 'error', message: 'Não foi possível guardar a rejeição no histórico local.' }); }
+  };
+
+  const searchCesta = async () => {
+    if (!cestaQuery.trim()) return;
+    setCestaLoading(true); setFeedback(null);
+    try {
+      const found = await searchCestaObservations(cestaQuery.trim());
+      const byId = new Map(observations.map((observation) => [observation.id, observation]));
+      found.forEach((observation) => byId.set(observation.id, { ...observation, source: 'cesta_mcp' }));
+      persistObservations([...byId.values()]);
+      setFeedback({ kind: 'success', message: `${found.length} observação(ões) recebida(s) da cesta.pt para revisão.` });
+    } catch (error) { setFeedback({ kind: 'error', message: error instanceof Error ? error.message : 'Não foi possível consultar a cesta.pt.' }); }
+    finally { setCestaLoading(false); }
+  };
 
   const approveImportedObservation = () => {
     if (!approval) return;
@@ -226,11 +268,15 @@ export function ProductCatalogueManager() {
     const review: ObservationReview = { action: approval.action, targetProductId: approval.targetProductId, ingredientId: approvalIngredient, packageSize, packageUnit: approvalUnit, confirmIdentity: approvalChecks.identity, confirmPackage: approvalChecks.package, confirmAllergens: approvalChecks.allergens, confirmDiet: approvalChecks.diet, fields: ['name', 'brand', 'barcode', 'package', 'price', 'source'], approvedAt: new Date().toISOString() };
     const result = approveObservation({ ...seedCatalogue, products }, observation, review);
     if (!result.ok) { setFeedback({ kind: 'error', message: result.errors[0] ?? 'A observação não pode ser aprovada.' }); return; }
-    if (persistProducts(result.catalogue.products)) {
-      const rawAudit = window.localStorage.getItem(OBSERVATION_AUDIT_STORAGE_KEY);
-      const audit = rawAudit ? JSON.parse(rawAudit) as unknown[] : [];
-      window.localStorage.setItem(OBSERVATION_AUDIT_STORAGE_KEY, JSON.stringify([...audit, result.audit]));
-      persistObservations(observations.map((item) => item.id === observation.id ? { ...item, reviewStatus: 'approved' } : item));
+    const additionalData = readAllApplicationItems(window.localStorage);
+    const rawAudit = additionalData[OBSERVATION_AUDIT_STORAGE_KEY] ?? null;
+    const audit: unknown = rawAudit ? JSON.parse(rawAudit) as unknown : [];
+    if (!Array.isArray(audit)) { setFeedback({ kind: 'error', message: 'O histórico de aprovações está inválido.' }); return; }
+    const nextObservations = observations.map((item) => item.id === observation.id ? { ...item, reviewStatus: 'approved' as const } : item);
+    additionalData[OBSERVATION_AUDIT_STORAGE_KEY] = JSON.stringify([...audit, result.audit]);
+    additionalData[OBSERVATIONS_STORAGE_KEY] = JSON.stringify({ version: 1, observations: nextObservations });
+    if (persistProducts(result.catalogue.products, additionalData)) {
+      setObservations(nextObservations);
       setApproval(null); setFeedback({ kind: 'success', message: 'Observação aprovada e registada no histórico de auditoria.' });
     }
   };
@@ -311,51 +357,6 @@ export function ProductCatalogueManager() {
 
   const exportCsv = () => safeDownload('smartbasket-produtos.csv', exportProductsCsv(products), 'text/csv;charset=utf-8');
   const exportJson = () => safeDownload('smartbasket-produtos.json', exportProductsJson(products), 'application/json;charset=utf-8');
-
-  /* Disabled external Cesta integration is retained in src/lib/pricing/cesta-mcp.ts. */
-  const beginCestaSearch = async (product: Product) => {
-    void product;
-    setFeedback({ kind: 'error', message: 'A pesquisa externa está desactivada. Introduza ou importe os dados localmente.' });
-    return;
-    /*
-    const ingredient = seedCatalogue.ingredients.find((entry) => entry.id === product.ingredientId);
-    if (!ingredient) return;
-    setCestaSearch({ productId: product.id, candidates: [], loading: true });
-    setFeedback(null);
-    try {
-      const candidates = await searchCestaProducts(ingredient.name, product.supermarketId);
-      setCestaSearch({ productId: product.id, candidates, loading: false, ...(candidates.length === 0 ? { message: ptPT.noCestaProducts } : {}) });
-    } catch (error) {
-      setCestaSearch({ productId: product.id, candidates: [], loading: false, message: error instanceof Error ? error.message : ptPT.catalogueImportError });
-    }
-    */
-  };
-
-  const importCestaCandidate = async (sourceProduct: Product, candidate: CestaCandidate) => {
-    const currentSearch = cestaSearch;
-    setCestaSearch({ productId: sourceProduct.id, candidates: currentSearch?.candidates ?? [], loading: true });
-    try {
-      const details = await getCestaProductDetails(candidate);
-      const checkedAt = new Date().toISOString();
-      const observed = observedProductFromCesta(sourceProduct, candidate, details, checkedAt, lisbonDate(checkedAt));
-      const previous = products.find((product) => product.id === observed.id);
-      if (previous) {
-        observed.allergens = previous.allergens;
-        observed.dietCompatibility = previous.dietCompatibility;
-        observed.priceHistory = previous.priceHistory;
-      }
-      const withHistory = previous
-        ? withPriceHistory(previous, observed, checkedAt, 'Observação atual da cesta.pt')
-        : { ...observed, priceHistory: initialPriceHistory(observed, checkedAt, 'Observação atual da cesta.pt') };
-      const nextProducts = previous
-        ? products.map((product) => product.id === previous.id ? withHistory : product)
-        : [...products, withHistory];
-      if (persistProducts(nextProducts)) setCestaSearch(null);
-      else setCestaSearch({ productId: sourceProduct.id, candidates: currentSearch?.candidates ?? [], loading: false });
-    } catch (error) {
-      setCestaSearch({ productId: sourceProduct.id, candidates: currentSearch?.candidates ?? [], loading: false, message: error instanceof Error ? error.message : ptPT.catalogueImportError });
-    }
-  };
 
   const beginScraplingRefresh = async (useFallback = false) => {
     setScraplingReview({ loading: true, candidates: [] });
@@ -524,6 +525,8 @@ export function ProductCatalogueManager() {
       <section className="catalogue-toolbar" aria-label={ptPT.productCatalogueTitle}>
         <div className="catalogue-filter"><label htmlFor="catalogue-search">{ptPT.searchProducts}</label><input id="catalogue-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={ptPT.searchProductsHint} /></div>
         <label className="catalogue-filter"><span>{ptPT.supermarket}</span><select value={supermarket} onChange={(event) => setSupermarket(event.target.value as SupermarketId | 'todos')}><option value="todos">{ptPT.allSupermarkets}</option>{SUPERMARKETS.map((id) => <option value={id} key={id}>{supermarketLabels[id]}</option>)}</select></label>
+        <label className="catalogue-filter"><span>Categoria</span><select value={category} onChange={(event) => setCategory(event.target.value)}><option value="todos">Todas</option>{Object.entries(categoryLabels).map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
+        <label className="catalogue-filter"><span>Qualidade</span><select value={qualityFilter} onChange={(event) => setQualityFilter(event.target.value as typeof qualityFilter)}><option value="todos">Todos</option><option value="real">Produtos reais</option><option value="incompleto">Informação incompleta</option><option value="preco_desconhecido">Preço desconhecido</option></select></label>
         <button className="button button-primary" type="button" onClick={beginAdd}>{ptPT.addProduct}</button>
         <div className="catalogue-export"><button className="button button-secondary" type="button" onClick={exportCsv}>{ptPT.exportCsv}</button><button className="button button-secondary" type="button" onClick={exportJson}>{ptPT.exportJson}</button></div>
       </section>
@@ -572,6 +575,7 @@ export function ProductCatalogueManager() {
       {adding && draft && priceForm && <ProductEditor draft={draft} priceForm={priceForm} isNew onChange={setDraft} onPriceFormChange={setPriceForm} onSave={saveDraft} onCancel={cancelEdit} />}
       <section className="catalogue-import-card observation-review-card" aria-label="Observações para revisão">
         <div><h2>Observações de fontes</h2><p>Importe JSON do collector ou de uma fonte aberta. As observações ficam separadas do catálogo e nunca são aprovadas automaticamente.</p></div>
+        <div className="observation-provider-search"><label>Pesquisar na cesta.pt<input value={cestaQuery} onChange={(event) => setCestaQuery(event.target.value)} placeholder="Ex.: arroz agulha" /></label><button className="button button-secondary" type="button" disabled={cestaLoading || !cestaQuery.trim()} onClick={() => void searchCesta()}>{cestaLoading ? 'A pesquisar…' : 'Pesquisar preços'}</button><small>Consulta manual; os resultados ficam pendentes de revisão. Não altera carrinhos nem envia o perfil do agregado.</small></div>
         <label className="file-picker">Escolher observações<input type="file" accept=".json,application/json" onChange={(event: ChangeEvent<HTMLInputElement>) => setObservationFile(event.target.files?.[0] ?? null)} /></label>
         <button className="button button-primary" type="button" disabled={!observationFile} onClick={() => void importObservations()}>Importar para revisão</button>
         {observations.length > 0 && <div className="observation-review-list">

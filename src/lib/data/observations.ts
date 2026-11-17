@@ -1,6 +1,6 @@
 import type { AllergenInfo, BaseUnit, Catalogue, DietCompatibility, SupermarketId } from '../types';
 
-export type ObservationSource = 'scrapling' | 'open_food_facts' | 'open_prices' | 'manual_import';
+export type ObservationSource = 'scrapling' | 'cesta_mcp' | 'open_food_facts' | 'open_prices' | 'manual_import';
 export type ObservationReviewStatus = 'pending' | 'approved' | 'rejected';
 export type ObservationPackage = { size: number | null; unit: BaseUnit | null; text: string | null; fixed: boolean | null };
 export type ObservationPrice = {
@@ -76,7 +76,7 @@ export function parseObservationImport(value: unknown): { ok: true; observations
     if (!isRecord(item) || typeof item.id !== 'string' || typeof item.source !== 'string' || typeof item.observedAt !== 'string') {
       errors.push(`Observação ${index + 1}: faltam id, source ou observedAt.`); return;
     }
-    if (!['scrapling', 'open_food_facts', 'open_prices', 'manual_import'].includes(item.source)) { errors.push(`Observação ${index + 1}: source inválida.`); return; }
+    if (!['scrapling', 'cesta_mcp', 'open_food_facts', 'open_prices', 'manual_import'].includes(item.source)) { errors.push(`Observação ${index + 1}: source inválida.`); return; }
     const price = isRecord(item.price) ? item.price : {};
     const packageInfo = isRecord(item.package) ? item.package : {};
     observations.push({

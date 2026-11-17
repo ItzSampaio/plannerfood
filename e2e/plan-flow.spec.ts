@@ -36,7 +36,10 @@ test('setup generates a safe real week, recipe pages, shopping list and honest b
   await expect(page.getByRole('heading', { name: 'A sua semana, refeição a refeição.' })).toBeVisible();
   await expect(page.locator('.day-card')).toHaveCount(7);
   await expect(page.locator('.meal-card')).toHaveCount(7);
-  const generatedPlan = await page.evaluate(() => JSON.parse(window.localStorage.getItem('smartbasket:plan:v1') ?? 'null')) as Plan;
+  const generatedPlan = await page.evaluate(() => {
+    const envelope = JSON.parse(window.localStorage.getItem('smartbasket:application:v1') ?? '{"data":{}}') as { data: Record<string, string | null> };
+    return JSON.parse(envelope.data['smartbasket:plan:v1'] ?? 'null');
+  }) as Plan;
   const profile = generatedPlan.profile;
   expect(profile.allergens).toContain('aipo');
   expect(profile.dietaryRule).toBe('sem_gluten');

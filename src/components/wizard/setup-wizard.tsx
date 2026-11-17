@@ -10,6 +10,7 @@ import {
   wizardReducer, WIZARD_DRAFT_KEY, WIZARD_STEPS, type WizardErrorCode, type WizardState,
 } from '../../lib/state/wizard-reducer';
 import { PLAN_STORAGE_KEY } from '../../lib/state/plan-storage';
+import { readApplicationItem, removeApplicationItem, writeApplicationItem } from '../../lib/state/application-storage';
 
 const ingredients = ingredientsData as unknown as Ingredient[];
 const errorCopy: Record<WizardErrorCode, string> = {
@@ -34,7 +35,7 @@ export function SetupWizard() {
   useEffect(() => {
     let raw: string | null = null;
     try {
-      raw = window.localStorage.getItem(WIZARD_DRAFT_KEY);
+      raw = readApplicationItem(window.localStorage, WIZARD_DRAFT_KEY);
       const saved = parseWizardSnapshot(raw);
       if (saved) dispatch({ type: 'restore', state: saved });
     } catch {
@@ -48,7 +49,7 @@ export function SetupWizard() {
   useEffect(() => {
     if (!hydrated) return;
     try {
-      window.localStorage.setItem(WIZARD_DRAFT_KEY, JSON.stringify({ version: 1, state }));
+      writeApplicationItem(window.localStorage, WIZARD_DRAFT_KEY, JSON.stringify({ version: 1, state }));
     } catch {
       // Local storage is optional; the wizard remains usable without it.
     }
@@ -145,7 +146,7 @@ export function SetupWizard() {
                 <>
                   <button className="button button-secondary" type="button" onClick={() => { setValidationMessage(null); dispatch({ type: 'back' }); }}>{ptPT.editAnswers}</button>
                   <a className="button button-primary" href="/plan" onClick={() => {
-                    try { window.localStorage.removeItem(PLAN_STORAGE_KEY); } catch { /* The plan route still generates from the saved profile. */ }
+                    try { removeApplicationItem(window.localStorage, PLAN_STORAGE_KEY); } catch { /* The plan route still generates from the saved profile. */ }
                   }}>{ptPT.generatePlan}<span className="button-arrow" aria-hidden="true">→</span></a>
                 </>
               ) : stepIndex === 0 ? (
