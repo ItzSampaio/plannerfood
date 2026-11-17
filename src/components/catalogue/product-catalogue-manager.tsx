@@ -125,8 +125,8 @@ export function ProductCatalogueManager() {
   const [importFile, setImportFile] = useState<File | null>(null);
   const [verifiedImportConfirmed, setVerifiedImportConfirmed] = useState(false);
   const [historyOpenId, setHistoryOpenId] = useState<string | null>(null);
-  const [cestaSearch, setCestaSearch] = useState<CestaSearch | null>(null);
   const [scraplingReview, setScraplingReview] = useState<ScraplingReviewState | null>(null);
+  const [cestaSearch, setCestaSearch] = useState<CestaSearch | null>(null);
 
   useEffect(() => {
     try {
@@ -237,7 +237,12 @@ export function ProductCatalogueManager() {
   const exportCsv = () => safeDownload('smartbasket-produtos.csv', exportProductsCsv(products), 'text/csv;charset=utf-8');
   const exportJson = () => safeDownload('smartbasket-produtos.json', exportProductsJson(products), 'application/json;charset=utf-8');
 
+  /* Disabled external Cesta integration is retained in src/lib/pricing/cesta-mcp.ts. */
   const beginCestaSearch = async (product: Product) => {
+    void product;
+    setFeedback({ kind: 'error', message: 'A pesquisa externa está desactivada. Introduza ou importe os dados localmente.' });
+    return;
+    /*
     const ingredient = seedCatalogue.ingredients.find((entry) => entry.id === product.ingredientId);
     if (!ingredient) return;
     setCestaSearch({ productId: product.id, candidates: [], loading: true });
@@ -248,6 +253,7 @@ export function ProductCatalogueManager() {
     } catch (error) {
       setCestaSearch({ productId: product.id, candidates: [], loading: false, message: error instanceof Error ? error.message : ptPT.catalogueImportError });
     }
+    */
   };
 
   const importCestaCandidate = async (sourceProduct: Product, candidate: CestaCandidate) => {
@@ -444,7 +450,6 @@ export function ProductCatalogueManager() {
         <div className="catalogue-filter"><label htmlFor="catalogue-search">{ptPT.searchProducts}</label><input id="catalogue-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={ptPT.searchProductsHint} /></div>
         <label className="catalogue-filter"><span>{ptPT.supermarket}</span><select value={supermarket} onChange={(event) => setSupermarket(event.target.value as SupermarketId | 'todos')}><option value="todos">{ptPT.allSupermarkets}</option>{SUPERMARKETS.map((id) => <option value={id} key={id}>{supermarketLabels[id]}</option>)}</select></label>
         <button className="button button-primary" type="button" onClick={beginAdd}>{ptPT.addProduct}</button>
-        <button className="button button-secondary" type="button" onClick={() => void beginScraplingRefresh(false)}>{ptPT.refreshScraplingPrices}</button>
         <div className="catalogue-export"><button className="button button-secondary" type="button" onClick={exportCsv}>{ptPT.exportCsv}</button><button className="button button-secondary" type="button" onClick={exportJson}>{ptPT.exportJson}</button></div>
       </section>
       {feedback && <p className={`catalogue-feedback ${feedback.kind}`} role={feedback.kind === 'error' ? 'alert' : 'status'}>{feedback.message}</p>}
@@ -494,9 +499,8 @@ export function ProductCatalogueManager() {
         <div className="catalogue-list-heading"><strong>{filteredProducts.length} {ptPT.products}</strong><span>{ptPT.pricesDoNotChangeSource}</span></div>
         {filteredProducts.map((product) => <article className="catalogue-product-card" key={product.id}>
           {editingId === product.id && draft && priceForm ? <ProductEditor draft={draft} priceForm={priceForm} isNew={false} onChange={setDraft} onPriceFormChange={setPriceForm} onSave={saveDraft} onCancel={cancelEdit} /> : <>
-            <div className="catalogue-product-summary"><div className="catalogue-product-icon" aria-hidden="true">{product.supermarketId === 'continente' ? 'C' : 'P'}</div><div className="catalogue-product-title"><div><strong>{product.name}</strong>{isGeneric(product) && <span className="generic-tag">{ptPT.sourceGeneric}</span>}</div><span>{product.brand || ptPT.brandNotProvided} · {supermarketLabels[product.supermarketId]} · {new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 2 }).format(product.packSize)} {baseUnitLabels[product.unit]}</span>{product.barcode && <small>EAN: {product.barcode}</small>}{product.externalProductId && <small>{ptPT.sourceProductId}: {product.externalProductId}</small>}</div><div className="catalogue-price"><strong>{product.priceState === 'manual' || product.priceState === 'verificado' || product.priceState === 'observado' ? `${product.price?.toFixed(2)} €` : product.priceState === 'estimativa' ? `${product.estimate?.value.toFixed(2)} €` : ptPT.unknownPrice}</strong><span>{product.priceState === 'observado' && !isCurrentObservation(product) ? ptPT.staleObservedPrice : priceStateLabels[product.priceState]}{product.priceObservation ? ` · ${product.priceObservation.checkedAt}` : product.priceUpdatedAt ? ` · ${product.priceUpdatedAt}` : ''}</span>{product.unitPrice && <small>{product.unitPrice.amount.toFixed(2)} €/{product.unitPrice.unit}</small>}{product.priceObservation?.promotion && <small>{ptPT.promotionObserved}</small>}{product.availability === 'unavailable' && <small>{ptPT.unavailableAtSource}</small>}</div><div className="catalogue-product-actions"><button className="button button-secondary" type="button" onClick={() => beginEdit(product)}>{ptPT.editProduct}</button><button className="button button-secondary" type="button" onClick={() => void beginCestaSearch(product)}>{ptPT.refreshLivePrice}</button></div></div>
+            <div className="catalogue-product-summary"><div className="catalogue-product-icon" aria-hidden="true">{product.supermarketId === 'continente' ? 'C' : 'P'}</div><div className="catalogue-product-title"><div><strong>{product.name}</strong>{isGeneric(product) && <span className="generic-tag">{ptPT.sourceGeneric}</span>}</div><span>{product.brand || ptPT.brandNotProvided} · {supermarketLabels[product.supermarketId]} · {new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 2 }).format(product.packSize)} {baseUnitLabels[product.unit]}</span>{product.barcode && <small>EAN: {product.barcode}</small>}{product.externalProductId && <small>{ptPT.sourceProductId}: {product.externalProductId}</small>}</div><div className="catalogue-price"><strong>{product.priceState === 'manual' || product.priceState === 'verificado' || product.priceState === 'observado' ? `${product.price?.toFixed(2)} €` : product.priceState === 'estimativa' ? `${product.estimate?.value.toFixed(2)} €` : ptPT.unknownPrice}</strong><span>{product.priceState === 'observado' && !isCurrentObservation(product) ? ptPT.staleObservedPrice : priceStateLabels[product.priceState]}{product.priceObservation ? ` · ${product.priceObservation.checkedAt}` : product.priceUpdatedAt ? ` · ${product.priceUpdatedAt}` : ''}</span>{product.unitPrice && <small>{product.unitPrice.amount.toFixed(2)} €/{product.unitPrice.unit}</small>}{product.priceObservation?.promotion && <small>{ptPT.promotionObserved}</small>}{product.availability === 'unavailable' && <small>{ptPT.unavailableAtSource}</small>}</div><div className="catalogue-product-actions"><button className="button button-secondary" type="button" onClick={() => beginEdit(product)}>{ptPT.editProduct}</button></div></div>
             <div className="catalogue-product-links">{product.productUrl ? <a href={product.productUrl} target="_blank" rel="noreferrer">{ptPT.openProductSource}</a> : <span>{ptPT.noProductSource}</span>}<button type="button" onClick={() => setHistoryOpenId(historyOpenId === product.id ? null : product.id)}>{ptPT.productHistory} ({product.priceHistory?.length ?? 0})</button></div>
-            {cestaSearch?.productId === product.id && <div className="cesta-search-panel"><p>{cestaSearch.loading ? ptPT.searchingCesta : ptPT.cestaSourceNotice}</p>{cestaSearch.message && <p role="status">{cestaSearch.message}</p>}{cestaSearch.candidates.map((candidate) => <div className="cesta-candidate" key={`${candidate.supermarketId}-${candidate.sourceProductId}`}><div><strong>{candidate.name}</strong><span>{candidate.packageText} · {candidate.price.toFixed(2)} €{candidate.unitPrice ? ` · ${candidate.unitPrice.amount.toFixed(2)} €/${candidate.unitPrice.unit}` : ''}</span>{candidate.promotion && <small>{ptPT.promotionObserved} ({candidate.promotion.regularPrice.toFixed(2)} € antes)</small>}</div><button className="button button-primary" type="button" disabled={cestaSearch.loading} onClick={() => void importCestaCandidate(product, candidate)}>{ptPT.importCestaProduct}</button></div>)}<p className="source-location-note">{ptPT.onlineAvailabilityOnly}</p></div>}
             {historyOpenId === product.id && <HistoryPanel entries={product.priceHistory ?? []} />}
           </>}
         </article>)}

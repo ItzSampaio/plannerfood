@@ -33,7 +33,8 @@ function eventResult(body: string): JsonRpcResult {
 }
 
 async function rpc(method: string, id: number, params: Record<string, unknown> = {}): Promise<JsonRpcResult> {
-  const response = await fetch(ENDPOINT, {
+  throw new Error('A integração Cesta está desactivada; não são feitas chamadas externas.');
+  /* const response = await fetch(ENDPOINT, {
     method: 'POST',
     mode: 'cors',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' },
@@ -43,10 +44,13 @@ async function rpc(method: string, id: number, params: Record<string, unknown> =
   const result = eventResult(await response.text());
   if (result.error) throw new Error(result.error.message ?? 'A cesta.pt devolveu um erro.');
   if (result.result?.isError) throw new Error(result.result.content?.map((entry) => entry.text ?? '').join('\n') || 'A pesquisa na cesta.pt falhou.');
-  return result;
+  return result; */
 }
 
 async function callTool(name: string, args: Record<string, unknown>): Promise<string> {
+  void name; void args;
+  throw new Error('A integração Cesta está desactivada; não são feitas chamadas externas.');
+  /*
   const initialized = await rpc('initialize', 1, {
     protocolVersion: MCP_PROTOCOL_VERSION,
     capabilities: {},
@@ -61,7 +65,7 @@ async function callTool(name: string, args: Record<string, unknown>): Promise<st
   const response = await rpc('tools/call', 2, { name, arguments: args });
   const content = response.result?.content?.filter((entry) => entry.type === 'text').map((entry) => entry.text ?? '').join('\n');
   if (!content) throw new Error('A cesta.pt não devolveu informação de produto.');
-  return content;
+  return content; */
 }
 
 function parseEuros(input: string): number | null {

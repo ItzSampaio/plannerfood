@@ -57,6 +57,10 @@ Use ESLint 9.39.5 and TypeScript 6.0.3 with the selected Next.js toolchain. The 
 
 None.
 
+## 2026-11-17 — Pricing integration recovery blocker
+
+The repository contains Scrapling and Cesta MCP integrations, including UI approval flows and tests. They cannot be marked compliant with the approved scope: `AGENTS.md` and `docs/SPEC.md` prohibit scraping, live price feeds, supermarket fetching and required network services. Scrapling also contains hard-coded fallback retailer prices and returns them when a fetch fails. Cesta has no postcode or branch selector, so it cannot establish local availability. No integration was deleted or silently replaced during recovery. Decide whether to remove/disable external fetching and retain local human-entered/imported prices, or amend the specification before implementation continues.
+
 
 ## 2026-11-16 — Phase 5 real calculation integration
 
@@ -69,3 +73,7 @@ The current Phase 6 authorization is for maintaining a product catalogue and pri
 The pricing integration budget is €0. Do not subscribe to, call, or depend on Bourmet, ReefAPI, or any paid service. Do not scrape retailer pages or call a source without permission to use it. Shipped generic prices remain unknown. A manually entered price is user-supplied; a price may be marked verified only after explicit user attestation that the source was checked and an observation date is recorded. Estimates and unknown prices remain separate states. Price changes are retained as local history; user imports/exports are the update mechanism, so changing source code is not needed for routine updates.
 
 Open Prices / Open Food Facts is an optional public, crowdsourced research lead, not a dependency or proof of current price. Its ODbL terms require attribution/share-alike obligations, and the available observations can be sparse or stale. Open Food Facts also warns volunteered product data can be incomplete or inaccurate. No third-party data is automatically imported into or marked verified in the app. A human must inspect each product and price and follow the source license before use. Retailer-specific product assignment and URLs are user-entered; no listing is claimed verified by this project.
+
+## 2026-11-17 — External pricing disabled
+
+Scrapling and Cesta integration code is retained as quarantined reference, but all runtime external calls are disabled. The Scrapling route and worker return an explicit disabled error and never emit observations; Cesta's network boundary throws before any request. The catalogue exposes local manual entry and validated CSV/JSON import/export only. Manual and imported prices remain distinct from verified retailer prices.
