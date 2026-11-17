@@ -165,6 +165,15 @@ Status: investigated and planned; implementation not started
 - Created `PHASE15_PLAN.md` with the complete ingredient matrix, Cesta limitations, enrichment workflow, milestones, risks and implementation sequence.
 - No application code, catalogue data, tests, dependencies or configuration were changed.
 
+## Phase 16 — Real product enrichment, batch 1
+
+Status: done — pending observations only
+
+- Searched seven priority ingredient groups at both retailers through the approved read-only Cesta tools.
+- Preserved 14 pending observations in `data/phase16-cesta-observations.json`, including timestamps, retailer IDs, URLs, prices, package information and raw detail evidence.
+- Added no approved products because all candidates still require ingredient, package, allergen and dietary review.
+- Preserved variable-weight candidates as non-fixed evidence and did not infer safety fields.
+
 ## Phase 14 — Smart catalogue expansion
 
 Status: done
