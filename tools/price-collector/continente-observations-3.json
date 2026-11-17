@@ -1,0 +1,180 @@
+[
+  {
+    "ok": true,
+    "retailer": "continente",
+    "url": "https://www.continente.pt/produto/banana-continente-2597619.html",
+    "observedAt": "2026-11-17T16:37:18.985291+00:00",
+    "httpStatus": 200,
+    "productName": "Banana Continente",
+    "brand": "Continente",
+    "productId": "2597619",
+    "ean": null,
+    "packageSize": null,
+    "packageUnit": null,
+    "displayedPrice": "1.19",
+    "currency": "EUR",
+    "pricePerUnit": {
+      "amount": 0.24,
+      "unit": "un"
+    },
+    "promotionalPrice": null,
+    "originalPrice": null,
+    "availability": "https://schema.org/InStock",
+    "ingredients": null,
+    "allergens": null,
+    "nutrition": null,
+    "weightedProduct": true,
+    "raw": {
+      "title": "Banana Continente | Continente Online",
+      "jsonLd": {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Banana Continente",
+        "mpn": "2597619",
+        "sku": "2597619",
+        "itemCondition": "https://schema.org/NewCondition",
+        "brand": {
+          "@type": "Brand",
+          "name": "Continente"
+        },
+        "image": [
+          "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dwcd554331/images/col/259/2597619-frente.jpg?sw=2000&sh=2000"
+        ],
+        "offers": {
+          "url": "https://www.continente.pt/produto/banana-continente-2597619.html",
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "price": "1.19",
+          "priceValidUntil": "2027-11-17",
+          "availability": "https://schema.org/InStock"
+        }
+      },
+      "minimumQuantityText": "600 gr (3 un) no Continente Online. ✔ Receba em casa ou recolha grátis na sua loja mais próxima!\">",
+      "embeddedAnalytics": {
+        "productId": "2597619",
+        "unitPrice": 0.24,
+        "unit": "un",
+        "quantity": 3.0
+      }
+    }
+  },
+  {
+    "ok": true,
+    "retailer": "continente",
+    "url": "https://www.continente.pt/produto/banana-da-madeira-continente-2076480.html",
+    "observedAt": "2026-11-17T16:37:20.593920+00:00",
+    "httpStatus": 200,
+    "productName": "Banana da Madeira Continente",
+    "brand": "Continente",
+    "productId": "2076480",
+    "ean": null,
+    "packageSize": null,
+    "packageUnit": null,
+    "displayedPrice": "2.99",
+    "currency": "EUR",
+    "pricePerUnit": {
+      "amount": 2.81,
+      "unit": "un"
+    },
+    "promotionalPrice": null,
+    "originalPrice": null,
+    "availability": "https://schema.org/InStock",
+    "ingredients": null,
+    "allergens": null,
+    "nutrition": null,
+    "weightedProduct": false,
+    "raw": {
+      "title": "Banana da Madeira Continente | Continente Online",
+      "jsonLd": {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Banana da Madeira Continente",
+        "mpn": "2076480",
+        "sku": "2076480",
+        "itemCondition": "https://schema.org/NewCondition",
+        "brand": {
+          "@type": "Brand",
+          "name": "Continente"
+        },
+        "image": [
+          "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dwd4c8df36/images/col/207/2076480-frente.jpg?sw=2000&sh=2000"
+        ],
+        "offers": {
+          "url": "https://www.continente.pt/produto/banana-da-madeira-continente-2076480.html",
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "price": "2.99",
+          "priceValidUntil": "2027-11-17",
+          "availability": "https://schema.org/InStock"
+        }
+      },
+      "minimumQuantityText": null,
+      "embeddedAnalytics": {
+        "productId": "2076480",
+        "unitPrice": 2.81,
+        "unit": "un",
+        "quantity": 1.0
+      }
+    }
+  },
+  {
+    "ok": true,
+    "retailer": "continente",
+    "url": "https://www.continente.pt/produto/banana-biologica-continente-bio-2577634.html",
+    "observedAt": "2026-11-17T16:37:22.415154+00:00",
+    "httpStatus": 200,
+    "productName": "Banana Biológica Continente Bio",
+    "brand": "Continente Bio",
+    "productId": "2577634",
+    "ean": null,
+    "packageSize": null,
+    "packageUnit": null,
+    "displayedPrice": "1.69",
+    "currency": "EUR",
+    "pricePerUnit": {
+      "amount": 1.86,
+      "unit": "un"
+    },
+    "promotionalPrice": null,
+    "originalPrice": null,
+    "availability": "https://schema.org/InStock",
+    "ingredients": null,
+    "allergens": null,
+    "nutrition": null,
+    "weightedProduct": false,
+    "raw": {
+      "title": "Banana Biológica Continente Bio | Continente Online",
+      "jsonLd": {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Banana Biológica Continente Bio",
+        "mpn": "2577634",
+        "sku": "2577634",
+        "itemCondition": "https://schema.org/NewCondition",
+        "brand": {
+          "@type": "Brand",
+          "name": "Continente Bio"
+        },
+        "image": [
+          "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dwd891488b/images/col/257/2577634-frente.jpg?sw=2000&sh=2000",
+          "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw3c8548d2/images/col/257/2577634-esquerdo.jpg?sw=2000&sh=2000"
+        ],
+        "offers": {
+          "url": "https://www.continente.pt/produto/banana-biologica-continente-bio-2577634.html",
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "price": "1.69",
+          "priceValidUntil": "2027-11-17",
+          "availability": "https://schema.org/InStock"
+        }
+      },
+      "minimumQuantityText": null,
+      "embeddedAnalytics": {
+        "productId": "2577634",
+        "unitPrice": 1.86,
+        "unit": "un",
+        "quantity": 1.0
+      }
+    }
+  }
+]

@@ -13,6 +13,9 @@ import { allergenLabels, categoryLabels, dietTagLabels, priceStateLabels, superm
 import { ptPT } from '../../i18n/pt-PT';
 import { toCents } from '../../lib/money';
 import { getCestaProductDetails, lisbonDate, observedProductFromCesta, searchCestaProducts, type CestaCandidate } from '../../lib/pricing/cesta-mcp';
+import { parseObservationImport, suggestObservationMatches, type RawObservation } from '../../lib/data/observations';
+import { observationFromScraplingCollector } from '../../lib/data/source-adapters';
+import { approveObservation, type ApprovalAction, type ObservationReview } from '../../lib/data/observation-approval';
 
 type PriceForm = {
   priceInput: string;
@@ -25,6 +28,8 @@ type Feedback = { kind: 'success' | 'error'; message: string } | null;
 type CestaSearch = { productId: string; candidates: CestaCandidate[]; loading: boolean; message?: string };
 const SUPERMARKETS: SupermarketId[] = ['continente', 'pingo_doce'];
 const DIET_TAGS: DietTag[] = ['vegetariana', 'vegana', 'sem_gluten', 'sem_lactose'];
+const OBSERVATIONS_STORAGE_KEY = 'smartbasket:product-observations:v1';
+const OBSERVATION_AUDIT_STORAGE_KEY = 'smartbasket:observation-audit:v1';
 
 type ScraplingCandidateReview = {
   id: string;
@@ -112,6 +117,22 @@ function priceHistoryText(entry: PriceHistoryEntry): string {
   return `${date} · ${priceStateLabels[entry.priceState]} · ${value}${source}${entry.note ? ` · ${entry.note}` : ''}`;
 }
 
+function observationSourceLabel(source: RawObservation['source']): string {
+  switch (source) {
+    case 'scrapling': return 'Scrapling';
+    case 'open_food_facts': return 'Open Food Facts';
+    case 'open_prices': return 'Open Prices';
+    case 'manual_import': return 'Importação manual';
+  }
+}
+
+function sellingModelLabel(model: Product['sellingModel'] | undefined): string {
+  if (model === 'variable_weight') return 'Vendível a peso/volume';
+  if (model === 'per_unit') return 'Por unidade';
+  return 'Embalagem fixa';
+}
+
+
 export function ProductCatalogueManager() {
   const [products, setProducts] = useState<Product[]>(seedCatalogue.products);
   const [ready, setReady] = useState(false);
@@ -127,6 +148,13 @@ export function ProductCatalogueManager() {
   const [historyOpenId, setHistoryOpenId] = useState<string | null>(null);
   const [scraplingReview, setScraplingReview] = useState<ScraplingReviewState | null>(null);
   const [cestaSearch, setCestaSearch] = useState<CestaSearch | null>(null);
+  const [observations, setObservations] = useState<RawObservation[]>([]);
+  const [observationFile, setObservationFile] = useState<File | null>(null);
+  const [approval, setApproval] = useState<{ id: string; action: ApprovalAction; targetProductId?: string } | null>(null);
+  const [approvalIngredient, setApprovalIngredient] = useState(seedCatalogue.ingredients[0]?.id ?? '');
+  const [approvalPackageSize, setApprovalPackageSize] = useState('');
+  const [approvalUnit, setApprovalUnit] = useState<BaseUnit>('g');
+  const [approvalChecks, setApprovalChecks] = useState({ identity: false, package: false, allergens: false, diet: false });
 
   useEffect(() => {
     try {
@@ -134,6 +162,11 @@ export function ProductCatalogueManager() {
       // localStorage is read after hydration to keep server and client markup identical.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setProducts(saved.products);
+      const savedObservations = window.localStorage.getItem(OBSERVATIONS_STORAGE_KEY);
+      if (savedObservations) {
+        const parsed = parseObservationImport(JSON.parse(savedObservations));
+        if (parsed.ok) setObservations(parsed.observations);
+      }
     } catch { /* The original catalogue remains available without local storage. */ }
     setReady(true);
   }, []);
@@ -157,6 +190,48 @@ export function ProductCatalogueManager() {
     } catch {
       setFeedback({ kind: 'error', message: ptPT.catalogueStorageError });
       return false;
+    }
+  };
+
+  const persistObservations = (next: RawObservation[]) => {
+    setObservations(next);
+    window.localStorage.setItem(OBSERVATIONS_STORAGE_KEY, JSON.stringify({ version: 1, observations: next }));
+  };
+
+  const importObservations = async () => {
+    if (!observationFile) return;
+    try {
+      const input: unknown = JSON.parse(await observationFile.text());
+      let parsed = parseObservationImport(input);
+      if (!parsed.ok && Array.isArray(input)) {
+        const collectorRecords = input.filter((item): item is Record<string, unknown> => typeof item === 'object' && item !== null && !Array.isArray(item));
+        if (collectorRecords.length === input.length) parsed = parseObservationImport({ observations: collectorRecords.map(observationFromScraplingCollector) });
+      }
+      if (!parsed.ok) { setFeedback({ kind: 'error', message: parsed.errors[0] ?? 'Não foi possível ler as observações.' }); return; }
+      const byId = new Map(observations.map((observation) => [observation.id, observation]));
+      parsed.observations.forEach((observation) => byId.set(observation.id, observation));
+      persistObservations([...byId.values()]);
+      setObservationFile(null);
+      setFeedback({ kind: 'success', message: 'Observações importadas para revisão. Nenhum produto foi aprovado.' });
+    } catch { setFeedback({ kind: 'error', message: 'O ficheiro de observações não contém JSON válido.' }); }
+  };
+
+  const rejectObservation = (id: string) => persistObservations(observations.map((observation) => observation.id === id ? { ...observation, reviewStatus: 'rejected' } : observation));
+
+  const approveImportedObservation = () => {
+    if (!approval) return;
+    const observation = observations.find((item) => item.id === approval.id);
+    const packageSize = Number(approvalPackageSize);
+    if (!observation || !Number.isFinite(packageSize) || packageSize <= 0) { setFeedback({ kind: 'error', message: 'Confirme um tamanho de embalagem positivo antes de aprovar.' }); return; }
+    const review: ObservationReview = { action: approval.action, targetProductId: approval.targetProductId, ingredientId: approvalIngredient, packageSize, packageUnit: approvalUnit, confirmIdentity: approvalChecks.identity, confirmPackage: approvalChecks.package, confirmAllergens: approvalChecks.allergens, confirmDiet: approvalChecks.diet, fields: ['name', 'brand', 'barcode', 'package', 'price', 'source'], approvedAt: new Date().toISOString() };
+    const result = approveObservation({ ...seedCatalogue, products }, observation, review);
+    if (!result.ok) { setFeedback({ kind: 'error', message: result.errors[0] ?? 'A observação não pode ser aprovada.' }); return; }
+    if (persistProducts(result.catalogue.products)) {
+      const rawAudit = window.localStorage.getItem(OBSERVATION_AUDIT_STORAGE_KEY);
+      const audit = rawAudit ? JSON.parse(rawAudit) as unknown[] : [];
+      window.localStorage.setItem(OBSERVATION_AUDIT_STORAGE_KEY, JSON.stringify([...audit, result.audit]));
+      persistObservations(observations.map((item) => item.id === observation.id ? { ...item, reviewStatus: 'approved' } : item));
+      setApproval(null); setFeedback({ kind: 'success', message: 'Observação aprovada e registada no histórico de auditoria.' });
     }
   };
 
@@ -495,11 +570,27 @@ export function ProductCatalogueManager() {
         </section>
       )}
       {adding && draft && priceForm && <ProductEditor draft={draft} priceForm={priceForm} isNew onChange={setDraft} onPriceFormChange={setPriceForm} onSave={saveDraft} onCancel={cancelEdit} />}
+      <section className="catalogue-import-card observation-review-card" aria-label="Observações para revisão">
+        <div><h2>Observações de fontes</h2><p>Importe JSON do collector ou de uma fonte aberta. As observações ficam separadas do catálogo e nunca são aprovadas automaticamente.</p></div>
+        <label className="file-picker">Escolher observações<input type="file" accept=".json,application/json" onChange={(event: ChangeEvent<HTMLInputElement>) => setObservationFile(event.target.files?.[0] ?? null)} /></label>
+        <button className="button button-primary" type="button" disabled={!observationFile} onClick={() => void importObservations()}>Importar para revisão</button>
+        {observations.length > 0 && <div className="observation-review-list">
+          {observations.map((observation) => {
+            const matches = suggestObservationMatches(observation, { ...seedCatalogue, products });
+            return <article className="observation-review-item" key={observation.id}>
+              <div><strong>{observation.name ?? 'Produto sem nome'}</strong><span>{observationSourceLabel(observation.source)} · {observation.retailer ? supermarketLabels[observation.retailer] : 'Retalhista desconhecido'} · {observation.observedAt}</span><span>{observation.ean ? `EAN ${observation.ean}` : 'EAN desconhecido'} · {observation.package.size ? `${observation.package.size} ${observation.package.unit ?? ''}` : 'embalagem desconhecida'}</span><span>{observation.price.amount === null ? 'Preço desconhecido' : `${observation.price.amount.toFixed(2)} ${observation.price.currency ?? 'EUR'}`}{observation.price.unitAmount !== null ? ` · ${observation.price.unitAmount.toFixed(2)} €/${observation.price.unit ?? '?'}` : ''}</span><span>{matches.length ? `${matches.length} correspondência(s) sugerida(s); aprovação manual obrigatória.` : 'Sem correspondência automática.'}</span><span>Estado: {observation.reviewStatus === 'rejected' ? 'Rejeitada' : 'Pendente de revisão'}</span></div>
+              {observation.sourceUrl && <a href={observation.sourceUrl} target="_blank" rel="noreferrer">Abrir fonte</a>}
+              {observation.reviewStatus === 'pending' && <div className="observation-review-actions"><button className="button button-secondary" type="button" onClick={() => rejectObservation(observation.id)}>Rejeitar</button><button className="button button-secondary" type="button" onClick={() => { setApproval({ id: observation.id, action: 'new_product' }); setApprovalPackageSize(observation.package.size?.toString() ?? ''); setApprovalUnit(observation.package.unit ?? 'g'); }}>Aprovar como produto novo</button>{matches[0] && <button className="button button-secondary" type="button" onClick={() => { setApproval({ id: observation.id, action: 'existing_product', targetProductId: matches[0]?.productId }); setApprovalPackageSize(observation.package.size?.toString() ?? ''); setApprovalUnit(observation.package.unit ?? 'g'); }}>Rever correspondência</button>}</div>}
+              {approval?.id === observation.id && <div className="observation-approval-form"><label>Ingrediente<select value={approvalIngredient} onChange={(event) => setApprovalIngredient(event.target.value)}>{seedCatalogue.ingredients.map((ingredient) => <option key={ingredient.id} value={ingredient.id}>{ingredient.name}</option>)}</select></label><label>Tamanho da embalagem<input type="number" min="0.001" step="any" value={approvalPackageSize} onChange={(event) => setApprovalPackageSize(event.target.value)} /></label><label>Unidade<select value={approvalUnit} onChange={(event) => setApprovalUnit(event.target.value as BaseUnit)}><option value="g">g</option><option value="ml">ml</option><option value="un">un</option></select></label><label><input type="checkbox" checked={approvalChecks.identity} onChange={(event) => setApprovalChecks({ ...approvalChecks, identity: event.target.checked })} /> Identidade confirmada</label><label><input type="checkbox" checked={approvalChecks.package} onChange={(event) => setApprovalChecks({ ...approvalChecks, package: event.target.checked })} /> Embalagem confirmada</label><label><input type="checkbox" checked={approvalChecks.allergens} onChange={(event) => setApprovalChecks({ ...approvalChecks, allergens: event.target.checked })} /> Alergénios revistos</label><label><input type="checkbox" checked={approvalChecks.diet} onChange={(event) => setApprovalChecks({ ...approvalChecks, diet: event.target.checked })} /> Dieta revista</label><button className="button button-primary" type="button" onClick={approveImportedObservation}>Confirmar aprovação</button><button className="button button-secondary" type="button" onClick={() => setApproval(null)}>Cancelar</button></div>}
+            </article>;
+          })}
+        </div>}
+      </section>
       <section className="catalogue-list" aria-label={ptPT.productCatalogueTitle}>
         <div className="catalogue-list-heading"><strong>{filteredProducts.length} {ptPT.products}</strong><span>{ptPT.pricesDoNotChangeSource}</span></div>
         {filteredProducts.map((product) => <article className="catalogue-product-card" key={product.id}>
           {editingId === product.id && draft && priceForm ? <ProductEditor draft={draft} priceForm={priceForm} isNew={false} onChange={setDraft} onPriceFormChange={setPriceForm} onSave={saveDraft} onCancel={cancelEdit} /> : <>
-            <div className="catalogue-product-summary"><div className="catalogue-product-icon" aria-hidden="true">{product.supermarketId === 'continente' ? 'C' : 'P'}</div><div className="catalogue-product-title"><div><strong>{product.name}</strong>{isGeneric(product) && <span className="generic-tag">{ptPT.sourceGeneric}</span>}</div><span>{product.brand || ptPT.brandNotProvided} · {supermarketLabels[product.supermarketId]} · {new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 2 }).format(product.packSize)} {baseUnitLabels[product.unit]}</span>{product.barcode && <small>EAN: {product.barcode}</small>}{product.externalProductId && <small>{ptPT.sourceProductId}: {product.externalProductId}</small>}</div><div className="catalogue-price"><strong>{product.priceState === 'manual' || product.priceState === 'verificado' || product.priceState === 'observado' ? `${product.price?.toFixed(2)} €` : product.priceState === 'estimativa' ? `${product.estimate?.value.toFixed(2)} €` : ptPT.unknownPrice}</strong><span>{product.priceState === 'observado' && !isCurrentObservation(product) ? ptPT.staleObservedPrice : priceStateLabels[product.priceState]}{product.priceObservation ? ` · ${product.priceObservation.checkedAt}` : product.priceUpdatedAt ? ` · ${product.priceUpdatedAt}` : ''}</span>{product.unitPrice && <small>{product.unitPrice.amount.toFixed(2)} €/{product.unitPrice.unit}</small>}{product.priceObservation?.promotion && <small>{ptPT.promotionObserved}</small>}{product.availability === 'unavailable' && <small>{ptPT.unavailableAtSource}</small>}</div><div className="catalogue-product-actions"><button className="button button-secondary" type="button" onClick={() => beginEdit(product)}>{ptPT.editProduct}</button></div></div>
+            <div className="catalogue-product-summary"><div className="catalogue-product-icon" aria-hidden="true">{product.supermarketId === 'continente' ? 'C' : 'P'}</div><div className="catalogue-product-title"><div><strong>{product.name}</strong>{isGeneric(product) && <span className="generic-tag">{ptPT.sourceGeneric}</span>}</div><span>{product.brand || ptPT.brandNotProvided} · {supermarketLabels[product.supermarketId]} · {sellingModelLabel(product.sellingModel)} · {new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 2 }).format(product.packSize)} {baseUnitLabels[product.unit]}</span>{product.minimumQuantity && <small>Mínimo: {product.minimumQuantity} {baseUnitLabels[product.minimumQuantityUnit ?? product.unit]}</small>}{product.barcode && <small>EAN: {product.barcode}</small>}{product.externalProductId && <small>{ptPT.sourceProductId}: {product.externalProductId}</small>}</div><div className="catalogue-price"><strong>{product.priceState === 'manual' || product.priceState === 'verificado' || product.priceState === 'observado' ? `${product.price?.toFixed(2)} €` : product.priceState === 'estimativa' ? `${product.estimate?.value.toFixed(2)} €` : ptPT.unknownPrice}</strong><span>{product.priceState === 'observado' && !isCurrentObservation(product) ? ptPT.staleObservedPrice : priceStateLabels[product.priceState]}{product.priceObservation ? ` · ${product.priceObservation.checkedAt}` : product.priceUpdatedAt ? ` · ${product.priceUpdatedAt}` : ''}</span>{product.unitPrice && <small>{product.unitPrice.amount.toFixed(2)} €/{product.unitPrice.unit}</small>}{product.priceObservation?.promotion && <small>{ptPT.promotionObserved}</small>}{product.availability === 'unavailable' && <small>{ptPT.unavailableAtSource}</small>}</div><div className="catalogue-product-actions"><button className="button button-secondary" type="button" onClick={() => beginEdit(product)}>{ptPT.editProduct}</button></div></div>
             <div className="catalogue-product-links">{product.productUrl ? <a href={product.productUrl} target="_blank" rel="noreferrer">{ptPT.openProductSource}</a> : <span>{ptPT.noProductSource}</span>}<button type="button" onClick={() => setHistoryOpenId(historyOpenId === product.id ? null : product.id)}>{ptPT.productHistory} ({product.priceHistory?.length ?? 0})</button></div>
             {historyOpenId === product.id && <HistoryPanel entries={product.priceHistory ?? []} />}
           </>}
@@ -534,6 +625,10 @@ function ProductEditor({ draft, priceForm, isNew, onChange, onPriceFormChange, o
       <label>{ptPT.productName}<input value={draft.name} onChange={(event) => onChange({ ...draft, name: event.target.value })} autoComplete="off" /></label>
       <label>{ptPT.brand}<input value={draft.brand ?? ''} onChange={(event) => onChange({ ...draft, brand: event.target.value || null })} autoComplete="off" /></label>
       <label>{ptPT.packSize}<span className="pack-size-field"><input type="number" min="0.001" step="any" value={draft.packSize} onChange={(event) => onChange({ ...draft, packSize: Number(event.target.value) })} /><span>{baseUnitLabels[draft.unit]}</span></span></label>
+      <label>Modelo de venda<select value={draft.sellingModel ?? 'fixed_package'} onChange={(event) => onChange({ ...draft, sellingModel: event.target.value as Product['sellingModel'], minimumQuantity: event.target.value === 'fixed_package' ? null : draft.minimumQuantity })}><option value="fixed_package">Embalagem fixa</option><option value="variable_weight">Vendível a peso/volume</option><option value="per_unit">Por unidade</option></select></label>
+      {(draft.sellingModel === 'variable_weight' || draft.sellingModel === 'per_unit') && <label>Quantidade mínima (opcional)<input type="number" min="0.001" step="any" value={draft.minimumQuantity ?? ''} onChange={(event) => onChange({ ...draft, minimumQuantity: event.target.value ? Number(event.target.value) : null, minimumQuantityUnit: draft.unit })} /></label>}
+      {draft.sellingModel === 'per_unit' && draft.unit !== 'un' && <label>Quantidade base por unidade<input type="number" min="0.001" step="any" value={draft.unitQuantity ?? ''} onChange={(event) => onChange({ ...draft, unitQuantity: event.target.value ? Number(event.target.value) : null })} /></label>}
+      {draft.sellingModel === 'variable_weight' && <label>Peso final conhecido (opcional)<input type="number" min="0.001" step="any" value={draft.actualCheckoutQuantity ?? ''} onChange={(event) => onChange({ ...draft, actualCheckoutQuantity: event.target.value ? Number(event.target.value) : null })} /></label>}
       <label>{ptPT.productUrl}<input type="url" value={draft.productUrl ?? ''} onChange={(event) => onChange({ ...draft, productUrl: event.target.value || null })} placeholder="https://…" /></label>
       <label>{ptPT.barcode}<input inputMode="numeric" value={draft.barcode ?? ''} onChange={(event) => onChange({ ...draft, barcode: event.target.value || null })} /></label>
       <label>{ptPT.priceState}<select value={draft.priceState} onChange={(event) => setPriceState(event.target.value as PriceState)}>{draft.priceState === 'observado' && <option value="observado" disabled>{priceStateLabels.observado}</option>}<option value="desconhecido">{ptPT.unknownPriceOption}</option><option value="manual">{ptPT.manualPriceOption}</option><option value="verificado">{ptPT.verifiedPriceOption}</option><option value="estimativa">{ptPT.estimatePriceOption}</option></select></label>

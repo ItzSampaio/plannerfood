@@ -76,3 +76,51 @@ Notes: The `/catalogo` local product manager, CSV/JSON import/export, history, a
 Recovery audit 2026-11-17: Scrapling and Cesta source files, UI, tests and route are present, but both conflict with the fixed no-scraping/no-live-price scope. The Scrapling worker returns hard-coded observations when fetching fails, so it is not safe to call a live integration. See `RECOVERY_REPORT.md`; implementation is paused pending a human decision about resolving this specification conflict. Current checks: typecheck passed, lint passed with 9 warnings, data validation passed; unit, build and Playwright commands did not return final statuses during the audit.
 
 Recovery completion 2026-11-17: external Scrapling and Cesta calls are disabled. The Scrapling worker is retained as a quarantined non-network entry point and no longer contains fallback prices. The API route returns `EXTERNAL_PRICING_DISABLED`, the live-refresh controls were removed, and local manual entry/import/export/history remain active. Optimiser and swaps remain parked.
+
+## Phase 7 — Multi-source product data foundation
+
+Status: done — local observation foundation only; no external fetching enabled
+
+- Added source-neutral raw observations with provenance, raw payloads, timestamps, missing fields, review status and retrieval errors.
+- Added pure Open Food Facts and Open Prices payload normalizers; they accept user-supplied JSON and do not perform HTTP requests.
+- Added exact-EAN and name-candidate matching suggestions, stale observation classification and adversarial unit tests.
+- Added local JSON observation import, review display and rejection in the catalogue manager. Imported observations remain separate from approved Products; no automatic approval or price-state conversion occurs.
+- Existing manual entry, CSV/JSON product import/export, price history, safety checks and budget calculations remain unchanged. Pingo Doce is not claimed to work.
+
+## Phase 10 — Real catalogue enrichment
+
+Status: done — evidence report and offline preservation only
+
+- Audited existing real/non-generic records and saved Scrapling observations.
+- Added a reproducible catalogue quality report and script.
+- Did not promote the three Continente Scrapling observations into Products because fixed package semantics and safety evidence are missing; no fabricated catalogue records were added.
+- Pingo Doce remains unexpanded because reliable current product evidence is unavailable.
+
+## Phase 8 — Controlled observation approval and catalogue integration
+
+Status: done
+
+- Added explicit approval for existing-product enrichment and new-product creation with identity, package and safety confirmations.
+- Exact EAN and name candidates remain suggestions only; package conflicts and retailer mismatches are rejected, and existing catalogue validators run before persistence.
+- Observed prices remain `observado`; Open Food Facts cannot supply a price, and missing safety data remains unknown.
+- Added local before/after audit records, observation status updates, duplicate prevention and explicit rejection/pending states.
+- Added approval controls to the local catalogue observation panel. No external fetching, optimiser or recipe swaps were added.
+
+## Phase 9 — Offline real-observation import
+
+Status: done — offline import only
+
+- Kept the approved no-live-fetch specification unchanged.
+- Added a pure adapter for previously saved Scrapling collector JSON, preserving source URL, retailer, product ID, timestamp, raw evidence, price/unit-price fields and missing safety fields.
+- The catalogue observation importer accepts normalized observations and standalone collector arrays, then sends them through the Phase 8 review/approval workflow.
+- No collection, Open Food Facts lookup, Open Prices lookup or Pingo Doce fetching occurs in SmartBasket.
+
+## Phase 11 — Variable-weight product model
+
+Status: done
+
+- Added fixed-package, variable-weight and per-unit selling models while preserving fixed-package defaults for existing products.
+- Added minimum purchase quantity, quantity-per-unit and actual checkout quantity fields.
+- Updated selection, basket, budget-facing expected checkout data, shopping-list text, validation and CSV/JSON persistence.
+- Variable-weight products without actual checkout quantity remain incomplete and never claim an exact checkout total.
+- Added calculation and import/export regression coverage. No observations were promoted and no external data was fetched.

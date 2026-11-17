@@ -29,3 +29,9 @@ The old Scrapling unit/UI and Playwright tests depended on fabricated external o
 - `npm.cmd run test:e2e`: passed — 3 tests.
 
 All changes are saved to disk. The working tree contains the intended recovery documentation, disabled integration changes, deterministic tests, and the pre-existing `next-env.d.ts` modification; no destructive Git operation was used.
+
+## Phase 7 foundation update — 2026-11-17
+
+Added a source-neutral observation layer without enabling network access. It supports provenance for Scrapling, Open Food Facts, Open Prices and manual imports; raw payloads, timestamps, missing fields, retrieval errors and review status are preserved. Pure JSON adapters normalize Open Food Facts and Open Prices payloads without merging fields or marking prices verified. The catalogue manager now imports observations locally, shows source/retailer/identity/EAN/package/price/date/missing-field information, suggests exact-EAN or name candidates, and permits rejection. Imported observations remain separate from Products and are never automatically approved.
+
+Phase 7 verification: typecheck passed; lint passed with 10 existing warnings and 0 errors; unit tests passed — 13 files, 97 tests; production build passed; data validation passed. Pingo Doce scraping remains unverified and no automatic external fetching was enabled.

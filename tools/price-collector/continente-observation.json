@@ -1,0 +1,50 @@
+[
+  {
+    "ok": true,
+    "retailer": "continente",
+    "url": "https://www.continente.pt/produto/banana-continente-2597619.html",
+    "observedAt": "2026-11-17T16:28:38.845125+00:00",
+    "httpStatus": 200,
+    "productName": "Banana Continente",
+    "brand": "Continente",
+    "productId": "2597619",
+    "ean": null,
+    "packageSize": null,
+    "packageUnit": null,
+    "displayedPrice": "1.19",
+    "currency": "EUR",
+    "pricePerUnit": null,
+    "promotionalPrice": null,
+    "originalPrice": null,
+    "availability": "https://schema.org/InStock",
+    "ingredients": null,
+    "allergens": null,
+    "nutrition": null,
+    "raw": {
+      "title": "Banana Continente | Continente Online",
+      "jsonLd": {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Banana Continente",
+        "mpn": "2597619",
+        "sku": "2597619",
+        "itemCondition": "https://schema.org/NewCondition",
+        "brand": {
+          "@type": "Brand",
+          "name": "Continente"
+        },
+        "image": [
+          "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dwcd554331/images/col/259/2597619-frente.jpg?sw=2000&sh=2000"
+        ],
+        "offers": {
+          "url": "https://www.continente.pt/produto/banana-continente-2597619.html",
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "price": "1.19",
+          "priceValidUntil": "2027-11-17",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    }
+  }
+]

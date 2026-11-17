@@ -5,7 +5,7 @@ export const PRODUCT_CATALOGUE_STORAGE_KEY = 'smartbasket:product-catalogue:v1';
 export type ProductImportResult = { ok: true; catalogue: Catalogue } | { ok: false; errors: string[] };
 const DIET_TAGS = ['vegetariana', 'vegana', 'sem_gluten', 'sem_lactose'] as const;
 const CSV_COLUMNS = [
-  'id', 'supermarketId', 'ingredientId', 'name', 'brand', 'packSize', 'unit', 'priceState', 'price',
+  'id', 'supermarketId', 'ingredientId', 'name', 'brand', 'packSize', 'unit', 'sellingModel', 'minimumQuantity', 'minimumQuantityUnit', 'unitQuantity', 'actualCheckoutQuantity', 'priceState', 'price',
   'priceUpdatedAt', 'estimate', 'allergens', 'dietCompatibility', 'productUrl', 'barcode', 'barcodes', 'imageUrl',
   'imageSourceUrl', 'externalProductId', 'availability', 'unitPrice', 'priceObservation', 'catalogueSource', 'promo', 'priceHistory',
 ] as const;
@@ -62,7 +62,9 @@ function parseProductObject(value: unknown, index: number, confirmedVerified: bo
   if (typeof name !== 'string' || !name.trim()) throw new Error(`Product row ${index + 1} requires a product name.`);
   const packSize = typeof value.packSize === 'number' ? value.packSize : Number(value.packSize);
   const unit = value.unit;
-  if (!Number.isFinite(packSize) || packSize <= 0 || !['g', 'ml', 'un'].includes(String(unit))) throw new Error(`Product row ${index + 1} requires a positive pack size and valid unit.`);
+  const sellingModel = value.sellingModel === undefined ? 'fixed_package' : value.sellingModel;
+  if (!['fixed_package', 'variable_weight', 'per_unit'].includes(String(sellingModel))) throw new Error(`Product row ${index + 1} has an unknown selling model.`);
+  if ((sellingModel === 'fixed_package' && (!Number.isFinite(packSize) || packSize <= 0)) || (sellingModel !== 'fixed_package' && Number.isFinite(packSize) && packSize <= 0) || !['g', 'ml', 'un'].includes(String(unit))) throw new Error(`Product row ${index + 1} requires a valid selling model, unit and package size where applicable.`);
   const productId = typeof value.id === 'string' && value.id.trim()
     ? value.id.trim()
     : `user-${slug(supermarketId)}-${slug(ingredientId)}-${slug(name)}-${index + 1}`;
@@ -84,8 +86,13 @@ function parseProductObject(value: unknown, index: number, confirmedVerified: bo
     name: name.trim(),
     supermarketId: supermarketId as Product['supermarketId'],
     ingredientId,
-    packSize,
     unit: unit as Product['unit'],
+    sellingModel: sellingModel as Product['sellingModel'],
+    packSize: Number.isFinite(packSize) ? packSize : 1,
+    minimumQuantity: typeof value.minimumQuantity === 'number' ? value.minimumQuantity : null,
+    minimumQuantityUnit: value.minimumQuantityUnit === 'g' || value.minimumQuantityUnit === 'ml' || value.minimumQuantityUnit === 'un' ? value.minimumQuantityUnit : null,
+    unitQuantity: typeof value.unitQuantity === 'number' ? value.unitQuantity : null,
+    actualCheckoutQuantity: typeof value.actualCheckoutQuantity === 'number' ? value.actualCheckoutQuantity : null,
     price,
     priceState,
     priceUpdatedAt: typeof value.priceUpdatedAt === 'string' ? value.priceUpdatedAt : null,
@@ -119,7 +126,7 @@ function parseCsv(text: string, confirmedVerified: boolean): Product[] {
       const value = record[field];
       if (typeof value === 'string' && value !== '') record[field] = parseJsonCell(value, field);
     }
-    for (const field of ['packSize', 'price']) {
+    for (const field of ['packSize', 'minimumQuantity', 'unitQuantity', 'actualCheckoutQuantity', 'price']) {
       const value = record[field];
       if (typeof value === 'string' && value.trim()) record[field] = Number(value.replace(',', '.'));
       else if (field === 'price') record[field] = null;
@@ -173,6 +180,11 @@ export function exportProductsCsv(products: readonly Product[]): string {
       brand: product.brand ?? '',
       packSize: String(product.packSize),
       unit: product.unit,
+      sellingModel: product.sellingModel ?? 'fixed_package',
+      minimumQuantity: product.minimumQuantity === null || product.minimumQuantity === undefined ? '' : String(product.minimumQuantity),
+      minimumQuantityUnit: product.minimumQuantityUnit ?? '',
+      unitQuantity: product.unitQuantity === null || product.unitQuantity === undefined ? '' : String(product.unitQuantity),
+      actualCheckoutQuantity: product.actualCheckoutQuantity === null || product.actualCheckoutQuantity === undefined ? '' : String(product.actualCheckoutQuantity),
       priceState: product.priceState,
       price: product.price === null ? '' : String(product.price),
       priceUpdatedAt: product.priceUpdatedAt ?? '',

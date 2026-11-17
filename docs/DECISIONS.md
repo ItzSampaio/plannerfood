@@ -77,3 +77,19 @@ Open Prices / Open Food Facts is an optional public, crowdsourced research lead,
 ## 2026-11-17 — External pricing disabled
 
 Scrapling and Cesta integration code is retained as quarantined reference, but all runtime external calls are disabled. The Scrapling route and worker return an explicit disabled error and never emit observations; Cesta's network boundary throws before any request. The catalogue exposes local manual entry and validated CSV/JSON import/export only. Manual and imported prices remain distinct from verified retailer prices.
+
+## 2026-11-17 — Multi-source observation foundation
+
+Raw observations are stored separately from approved `Product` records. Open Food Facts and Open Prices are represented by pure local JSON adapters only; this phase does not add network access. Exact EAN matches are suggestions, not approvals. Name-only matches require review. Missing allergens, dietary compatibility, package data and prices remain unknown, and external observations never become `verificado` automatically. This preserves the existing fixed no-live-fetch application scope while preparing a future controlled import amendment.
+
+## 2026-11-17 — Controlled observation approval
+
+Observation approval is explicit and local. The reviewer confirms identity, package, allergens and dietary data, chooses an ingredient and confirms a package size before enriching an existing product or creating a new product. Approval runs `validateCatalogue` and records before/after fields, product ID, observation ID and approval time in local storage. Observed prices remain `observado`; unknown safety data remains unknown and cannot weaken an existing product.
+
+## 2026-11-17 — Phase 9 offline boundary
+
+Phase 9 is limited to importing previously collected JSON. SmartBasket does not fetch Scrapling, Open Food Facts or Open Prices data, and Pingo Doce remains unsupported/unverified. Standalone Scrapling output is normalized into `RawObservation` with missing EAN/package/safety fields preserved as unknown/null, then requires the Phase 8 approval workflow. This keeps the approved no-live-fetch specification unchanged.
+
+## 2026-11-17 — Variable-weight selling model
+
+Existing products retain the fixed-package default. Variable-weight products use an explicit unit-price basis and optional minimum quantity; their expected cost is separate from exact checkout cost. Exact checkout remains unknown until an actual quantity is recorded. Per-unit products use whole-unit rounding and require an explicit quantity-per-unit when the ingredient base unit is mass or volume. No missing package size is inferred.

@@ -184,7 +184,17 @@ export function validateProducts(input: unknown, ingredientInput: unknown): Vali
     if (!supermarkets.includes(value.supermarketId as SupermarketId)) add(errors, 'enum.invalid', `${path}.supermarketId`, 'Unknown supermarket.');
     const ingredient = typeof value.ingredientId === 'string' ? ingredientMap.get(value.ingredientId) : undefined;
     if (!ingredient) add(errors, 'reference.invalid', `${path}.ingredientId`, 'Ingredient reference does not exist.');
-    if (!finitePositive(value.packSize)) add(errors, 'pack_size.invalid', `${path}.packSize`, 'Pack size must be positive.');
+    const sellingModel = value.sellingModel === undefined ? 'fixed_package' : value.sellingModel;
+    if (!['fixed_package', 'variable_weight', 'per_unit'].includes(String(sellingModel))) add(errors, 'selling_model.invalid', `${path}.sellingModel`, 'Unknown product selling model.');
+    if (sellingModel === 'variable_weight' && value.unit === 'un') add(errors, 'selling_model.unit_invalid', `${path}.sellingModel`, 'Variable-weight products require a mass or volume unit.');
+    if (sellingModel === 'fixed_package' && !finitePositive(value.packSize)) add(errors, 'pack_size.invalid', `${path}.packSize`, 'Fixed-package products require a positive pack size.');
+    if (sellingModel !== 'fixed_package' && value.packSize !== null && value.packSize !== undefined && !finitePositive(value.packSize)) add(errors, 'pack_size.invalid', `${path}.packSize`, 'Optional legacy pack size must be positive when provided.');
+    if (sellingModel === 'per_unit' && value.unit !== 'un' && !finitePositive(value.unitQuantity)) add(errors, 'unit_quantity.required', `${path}.unitQuantity`, 'Per-unit products with a base mass/volume unit require a positive quantity per unit.');
+    if (value.unitQuantity !== undefined && value.unitQuantity !== null && !finitePositive(value.unitQuantity)) add(errors, 'unit_quantity.invalid', `${path}.unitQuantity`, 'Quantity per purchased unit must be positive.');
+    if (value.minimumQuantity !== undefined && value.minimumQuantity !== null && !finitePositive(value.minimumQuantity)) add(errors, 'minimum_quantity.invalid', `${path}.minimumQuantity`, 'Minimum purchase quantity must be positive.');
+    if (value.minimumQuantityUnit !== undefined && value.minimumQuantityUnit !== null && !(units as readonly unknown[]).includes(value.minimumQuantityUnit)) add(errors, 'minimum_quantity_unit.invalid', `${path}.minimumQuantityUnit`, 'Minimum purchase quantity unit is invalid.');
+    if (sellingModel === 'fixed_package' && value.minimumQuantity !== undefined && value.minimumQuantity !== null) add(errors, 'minimum_quantity.fixed_forbidden', `${path}.minimumQuantity`, 'Fixed packages cannot use a variable minimum quantity.');
+    if (value.actualCheckoutQuantity !== undefined && value.actualCheckoutQuantity !== null && !finitePositive(value.actualCheckoutQuantity)) add(errors, 'checkout_quantity.invalid', `${path}.actualCheckoutQuantity`, 'Actual checkout quantity must be positive.');
     if (!(units as readonly unknown[]).includes(value.unit)) add(errors, 'enum.invalid', `${path}.unit`, 'Unknown product unit.');
     if (ingredient && value.unit !== ingredient.baseUnit) add(errors, 'unit.mismatch', `${path}.unit`, 'Product unit must match ingredient base unit.');
     if (value.brand !== undefined && value.brand !== null && (typeof value.brand !== 'string' || !value.brand.trim())) add(errors, 'brand.invalid', `${path}.brand`, 'Brand must be a non-empty string when provided.');

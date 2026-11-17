@@ -1,0 +1,18 @@
+[
+  {
+    "ok": false,
+    "retailer": "continente",
+    "url": "https://www.continente.pt/produto/arroz-agulha-continente-2027209.html",
+    "observedAt": "2026-11-17T16:27:40.422234+00:00",
+    "status": 410,
+    "error": "HTTP 410"
+  },
+  {
+    "ok": false,
+    "retailer": "pingo_doce",
+    "url": "https://www.pingodoce.pt/home/produtos/congelados/pizzas-e-refeicoes-prontas/pizzas/pizza-ristorante-mozzarella-dr-oetker-355g.html",
+    "observedAt": "2026-11-17T16:27:41.433720+00:00",
+    "status": 404,
+    "error": "HTTP 404"
+  }
+]

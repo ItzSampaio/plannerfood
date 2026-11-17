@@ -15,6 +15,7 @@ export function computeBasket(plan: Plan, catalogue: Catalogue, today: string): 
         ingredientId: need.ingredientId, ingredientName: ingredient?.name ?? need.ingredientId,
         quantity: need.quantityUncertain ? null : need.quantity, quantityUncertain: need.quantityUncertain,
         warnings: need.warnings, owned, selection, checkoutCents: null, consumptionCents: null,
+        expectedCheckoutCents: null,
       };
     }
     return {
@@ -22,6 +23,7 @@ export function computeBasket(plan: Plan, catalogue: Catalogue, today: string): 
       quantity: need.quantityUncertain ? null : need.quantity, quantityUncertain: need.quantityUncertain,
       warnings: need.warnings, owned, selection,
       checkoutCents: owned ? 0 : selection.checkoutCents,
+      expectedCheckoutCents: owned ? 0 : selection.expectedCheckoutCents ?? selection.checkoutCents,
       consumptionCents: selection.consumptionCents,
     };
   });
@@ -49,11 +51,12 @@ export function computeBasket(plan: Plan, catalogue: Catalogue, today: string): 
     }
     const { product, packs } = line.selection;
     if (line.quantityUncertain) consumptionIncomplete = true;
+    if (line.selection.checkoutQuantityKnown === false) hasUncertainQuantity = true;
     if (line.consumptionCents === null) consumptionIncomplete = true;
     else consumptionTotalCents += line.consumptionCents;
     if (line.owned) continue;
     if (product.priceState === 'manual' || product.priceState === 'verificado') {
-      const checkout = line.checkoutCents ?? 0;
+      const checkout = line.expectedCheckoutCents ?? 0;
       subtotalKnownCents += checkout;
       estimatedTotalCents += checkout;
       estimateLow += checkout;
@@ -61,13 +64,13 @@ export function computeBasket(plan: Plan, catalogue: Catalogue, today: string): 
     } else if (line.selection.priceState === 'observado') {
       hasObservation = true;
       estimatesBounded = false;
-      const checkout = line.checkoutCents ?? 0;
+      const checkout = line.expectedCheckoutCents ?? 0;
       observedTotalCents += checkout;
       estimatedTotalCents += checkout;
     } else if (product.priceState === 'estimativa') {
       hasEstimate = true;
       estimateCount += 1;
-      const checkout = line.checkoutCents ?? 0;
+      const checkout = line.expectedCheckoutCents ?? 0;
       estimatedTotalCents += checkout;
       if (product.estimate?.low === undefined || product.estimate.high === undefined) estimatesBounded = false;
       else {

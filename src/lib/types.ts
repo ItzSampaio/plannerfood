@@ -21,6 +21,7 @@ export type LooseUnit = 'colher_sopa' | 'colher_cha' | 'chavena' | 'pitada';
 export type RecipeUnit = BaseUnit | LooseUnit;
 export type IngredientCategory = 'carne_peixe' | 'laticinios_ovos' | 'frutas_legumes' | 'hidratos' | 'despensa';
 export type PriceState = 'manual' | 'verificado' | 'observado' | 'estimativa' | 'desconhecido';
+export type SellingModel = 'fixed_package' | 'variable_weight' | 'per_unit';
 export type PriceObservation = {
   provider: 'cesta_mcp' | 'scrapling';
   sourceProductId: string;
@@ -63,6 +64,11 @@ export type Product = {
   ingredientId: string;
   packSize: number;
   unit: BaseUnit;
+  sellingModel?: SellingModel;
+  minimumQuantity?: number | null;
+  minimumQuantityUnit?: BaseUnit | null;
+  unitQuantity?: number | null;
+  actualCheckoutQuantity?: number | null;
   price: number | null;
   priceState: PriceState;
   priceUpdatedAt: string | null;
@@ -136,7 +142,7 @@ export type ValidationResult = { ok: true } | { ok: false; errors: ValidationErr
 export type QuantityWarning = { ingredientId: string; recipeId: string; unit: LooseUnit };
 export type IngredientNeed = { ingredientId: string; quantity: number; quantityUncertain: boolean; warnings: QuantityWarning[] };
 export type ProductSelection =
-  | { status: 'selected'; product: Product; packs: number; priceState: PriceState; perPackPriceCents: number | null; checkoutCents: number | null; consumptionCents: number | null }
+  | { status: 'selected'; product: Product; packs: number; priceState: PriceState; perPackPriceCents: number | null; checkoutCents: number | null; expectedCheckoutCents?: number | null; checkoutQuantity?: number | null; checkoutQuantityKnown?: boolean; consumptionCents: number | null }
   | { status: 'unavailable'; reason: 'no_safe_product' | 'unsafe_override' };
 export type BasketLine = {
   ingredientId: string;
@@ -147,6 +153,7 @@ export type BasketLine = {
   owned: boolean;
   selection: ProductSelection;
   checkoutCents: number | null;
+  expectedCheckoutCents: number | null;
   consumptionCents: number | null;
 };
 export type BasketRange = { low: number; high: number };

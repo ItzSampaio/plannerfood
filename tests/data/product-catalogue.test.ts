@@ -102,4 +102,12 @@ describe('editable product catalogue files', () => {
     const result = parseProductImport(JSON.stringify([duplicate, duplicate]), 'json', catalogue, false);
     expect(result.ok).toBe(false);
   });
+
+  it('round-trips selling models, minimum quantities and per-unit conversion data', () => {
+    const source = { ...catalogue.products[0]!, id: 'variable-test', sellingModel: 'variable_weight' as const, packSize: 1, minimumQuantity: 600, minimumQuantityUnit: 'g' as const, actualCheckoutQuantity: null };
+    const exported = exportProductsJson([source]);
+    const imported = parseProductImport(exported, 'json', catalogue, false);
+    expect(imported.ok).toBe(true);
+    if (imported.ok) expect(imported.catalogue.products.find((product) => product.id === source.id)).toMatchObject({ sellingModel: 'variable_weight', minimumQuantity: 600, minimumQuantityUnit: 'g' });
+  });
 });

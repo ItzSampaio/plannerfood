@@ -24,6 +24,22 @@ describe('calculation engine', () => {
     expect(basket.lines[0]?.quantity).toBe(1200);
   });
 
+  it('calculates variable-weight expected cost without claiming exact checkout weight', () => {
+    const catalogue = fakeCalcCatalogue();
+    const base = catalogue.products[0]!;
+    catalogue.products = [{ ...base, id: 'banana-weight', name: 'Banana', sellingModel: 'variable_weight', unit: 'g', packSize: 1, price: 1.99, priceState: 'manual', priceUpdatedAt: '2026-11-16', unitPrice: { amount: 1.99, unit: 'kg' }, minimumQuantity: 600, minimumQuantityUnit: 'g' }];
+    const selected = selectProduct('rice', 300, fakeCalcPlan(catalogue).profile, catalogue, '2026-11-16');
+    expect(selected).toMatchObject({ status: 'selected', checkoutCents: null, expectedCheckoutCents: 119, checkoutQuantity: 600, checkoutQuantityKnown: false });
+  });
+
+  it('uses actual variable checkout quantity when explicitly recorded', () => {
+    const catalogue = fakeCalcCatalogue();
+    const base = catalogue.products[0]!;
+    catalogue.products = [{ ...base, id: 'apples-unit', sellingModel: 'per_unit', unit: 'un', packSize: 1, price: 0.5, priceState: 'manual', priceUpdatedAt: '2026-11-16', unitPrice: { amount: 0.5, unit: 'un' }, actualCheckoutQuantity: 4 }];
+    const selected = selectProduct('rice', 3.2, fakeCalcPlan(catalogue).profile, catalogue, '2026-11-16');
+    expect(selected).toMatchObject({ status: 'selected', checkoutCents: 200, expectedCheckoutCents: 200, checkoutQuantity: 4, checkoutQuantityKnown: true });
+  });
+
   it('accepts a valid zero-price product as a known price', () => {
     const catalogue = fakeCalcCatalogue();
     catalogue.products = [ { ...catalogue.products[0]!, price: 0, priceState: 'manual', priceUpdatedAt: '2026-11-16' } ];

@@ -6,5 +6,5 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   { rules: { "@next/next/no-html-link-for-pages": "off" } },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", ".venv/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);

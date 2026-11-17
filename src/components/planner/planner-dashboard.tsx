@@ -221,6 +221,17 @@ function priceText(selection: ProductSelection): string {
   return `${priceStateLabels[selection.priceState]} · ${ptPT.packPrice.toLocaleLowerCase('pt-PT')}: ${formatCents(selection.perPackPriceCents)}`;
 }
 
+function purchaseText(selection: Extract<ProductSelection, { status: 'selected' }>): string {
+  const model = selection.product.sellingModel ?? 'fixed_package';
+  if (model === 'variable_weight') {
+    return selection.checkoutQuantity === null || selection.checkoutQuantityKnown === false
+      ? 'Quantidade final e custo de checkout por confirmar'
+      : `Quantidade: ${selection.checkoutQuantity} ${selection.product.unit}`;
+  }
+  if (model === 'per_unit') return `${selection.checkoutQuantity ?? selection.packs} unidades`;
+  return `${selection.packs} × ${selection.product.packSize} ${selection.product.unit}`;
+}
+
 function ShoppingView({ plan, basket, activeCatalogue, onTogglePurchased }: { plan: Plan; basket: Basket; activeCatalogue: typeof catalogue; onTogglePurchased: (ingredientId: string) => void }) {
   const ingredients = new Map(activeCatalogue.ingredients.map((ingredient) => [ingredient.id, ingredient]));
   const groups = new Map<string, typeof basket.lines>();
@@ -246,7 +257,7 @@ function ShoppingView({ plan, basket, activeCatalogue, onTogglePurchased }: { pl
         <label className="shopping-check"><input type="checkbox" checked={Boolean(line.owned || plan.purchased[line.ingredientId])} disabled={line.owned} onChange={() => onTogglePurchased(line.ingredientId)} /><span className="sr-only">{plan.purchased[line.ingredientId] ? ptPT.purchased : ptPT.notPurchased}: {line.ingredientName}</span></label>
         <div className="shopping-item-main"><strong>{line.ingredientName}</strong><span>{ptPT.needed}: {line.quantity === null ? 'Quantidade por confirmar' : `${new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 2 }).format(line.quantity)} ${line.warnings.length ? '— unidade por confirmar' : selected?.product.unit ?? ''}`}</span>
           {line.warnings.length > 0 && <small className="warning-copy">Conversão de unidade por confirmar.</small>}
-          {line.owned ? <span className="owned-pill">{ptPT.ownedAtHome}</span> : selected ? <><span className="product-name">{selected.product.name} · {supermarketLabels[selected.product.supermarketId]}</span><span className={`price-state state-${selected.priceState}`}>{priceText(selected)}</span><span className="pack-line">{selected.packs} × {new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 2 }).format(selected.product.packSize)} {selected.product.unit} {ptPT.buyPacks}{selected.checkoutCents === null ? ` · ${ptPT.checkoutCost}: ${ptPT.unknownPrice.toLocaleLowerCase('pt-PT')}` : ` · ${ptPT.checkoutCost}: ${formatCents(selected.checkoutCents)}`}</span></> : <span className="unavailable-pill">{ptPT.unavailableProduct}</span>}
+          {line.owned ? <span className="owned-pill">{ptPT.ownedAtHome}</span> : selected ? <><span className="product-name">{selected.product.name} · {supermarketLabels[selected.product.supermarketId]}</span><span className={`price-state state-${selected.priceState}`}>{priceText(selected)}</span><span className="pack-line">{purchaseText(selected)}{selected.checkoutCents === null ? ` · ${ptPT.checkoutCost}: ${ptPT.unknownPrice.toLocaleLowerCase('pt-PT')}` : ` · ${ptPT.checkoutCost}: ${formatCents(selected.checkoutCents)}`}</span></> : <span className="unavailable-pill">{ptPT.unavailableProduct}</span>}
         </div>
         {selected?.product.priceUpdatedAt && <time className="updated-date" dateTime={selected.product.priceUpdatedAt}>{new Intl.DateTimeFormat('pt-PT', { dateStyle: 'medium' }).format(new Date(selected.product.priceUpdatedAt))}</time>}
       </article>;
