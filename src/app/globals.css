@@ -408,3 +408,137 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
   .shopping-item { grid-template-columns: 25px minmax(0,1fr); }
   .updated-date { grid-column: 2; }
 }
+
+.scrapling-review-panel {
+  margin: 20px 0;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #d1d9cf;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.scrapling-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.scrapling-review-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2e24;
+  margin: 0 0 6px;
+}
+.scrapling-review-header p {
+  color: #5c6c60;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+.scrapling-error-banner {
+  background: #fdf2f2;
+  border: 1px solid #f8b4b4;
+  color: #9b1c1c;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.scrapling-candidates-grid {
+  display: grid;
+  gap: 20px;
+}
+.scrapling-candidate-card {
+  border: 1px solid #e1e7de;
+  border-radius: 12px;
+  padding: 18px;
+  background: #fafbf9;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.scrapling-candidate-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.scrapling-candidate-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.supermarket-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #2b5735;
+  background: #e8f3e9;
+  padding: 2px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+.scrapling-candidate-price {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.scrapling-candidate-price strong {
+  font-size: 18px;
+  color: #1f2e24;
+}
+.scrapling-candidate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.scrapling-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334438;
+}
+.scrapling-field select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cfd7cb;
+  background: #fff;
+  font: inherit;
+}
+.scrapling-safety-box {
+  border: 1px solid #dbe2d8;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+}
+.scrapling-safety-box legend {
+  font-weight: 600;
+  font-size: 13px;
+  color: #2b3b30;
+  padding: 0 6px;
+}
+.scrapling-safety-blocked {
+  background: #fff8e6;
+  border: 1px solid #f6cf7a;
+  color: #7a5200;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.scrapling-candidate-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+

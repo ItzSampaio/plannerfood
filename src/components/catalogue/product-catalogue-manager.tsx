@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import { catalogue as seedCatalogue } from '../../lib/catalogue';
-import { ALLERGENS, type Allergen, type DietCompatibility, type DietTag, type Product, type PriceHistoryEntry, type PriceState, type SupermarketId } from '../../lib/types';
+import { ALLERGENS, type Allergen, type AllergenInfo, type BaseUnit, type DietCompatibility, type DietStatus, type DietTag, type Product, type PriceHistoryEntry, type PriceState, type SupermarketId } from '../../lib/types';
 import { validateCatalogue } from '../../lib/data/validators';
 import { initialPriceHistory, withPriceHistory } from '../../lib/data/price-history';
 import {
   exportProductsCsv, exportProductsJson, parseProductImport, PRODUCT_CATALOGUE_STORAGE_KEY,
   readSavedCatalogue, serializeSavedCatalogue,
 } from '../../lib/data/product-catalogue';
-import { allergenLabels, dietTagLabels, priceStateLabels, supermarketLabels, baseUnitLabels } from '../../i18n/labels';
+import { allergenLabels, categoryLabels, dietTagLabels, priceStateLabels, supermarketLabels, baseUnitLabels } from '../../i18n/labels';
 import { ptPT } from '../../i18n/pt-PT';
 import { toCents } from '../../lib/money';
 import { getCestaProductDetails, lisbonDate, observedProductFromCesta, searchCestaProducts, type CestaCandidate } from '../../lib/pricing/cesta-mcp';
@@ -25,6 +25,41 @@ type Feedback = { kind: 'success' | 'error'; message: string } | null;
 type CestaSearch = { productId: string; candidates: CestaCandidate[]; loading: boolean; message?: string };
 const SUPERMARKETS: SupermarketId[] = ['continente', 'pingo_doce'];
 const DIET_TAGS: DietTag[] = ['vegetariana', 'vegana', 'sem_gluten', 'sem_lactose'];
+
+type ScraplingCandidateReview = {
+  id: string;
+  name: string;
+  brand: string | null;
+  supermarketId: SupermarketId;
+  packSize: number;
+  unit: BaseUnit;
+  price: number;
+  unitPrice?: { amount: number; unit: 'kg' | 'l' | 'un' };
+  isWeighted?: boolean;
+  productUrl: string;
+  retrievedAt: string;
+  sourceProductId: string;
+  ingredientId: string;
+  allergens: AllergenInfo;
+  dietCompatibility: DietCompatibility;
+  weightedNote?: string;
+  approved?: boolean;
+};
+
+type ScraplingReviewState = {
+  loading: boolean;
+  error?: string;
+  fallbackAvailable?: boolean;
+  candidates: ScraplingCandidateReview[];
+};
+
+function isCandidateSafetyConfirmed(c: ScraplingCandidateReview): boolean {
+  if (c.allergens === 'unknown') return false;
+  for (const tag of DIET_TAGS) {
+    if (c.dietCompatibility[tag] === 'desconhecido') return false;
+  }
+  return true;
+}
 
 function formPrice(product: Product): PriceForm {
   return {
@@ -91,6 +126,7 @@ export function ProductCatalogueManager() {
   const [verifiedImportConfirmed, setVerifiedImportConfirmed] = useState(false);
   const [historyOpenId, setHistoryOpenId] = useState<string | null>(null);
   const [cestaSearch, setCestaSearch] = useState<CestaSearch | null>(null);
+  const [scraplingReview, setScraplingReview] = useState<ScraplingReviewState | null>(null);
 
   useEffect(() => {
     try {
@@ -240,6 +276,164 @@ export function ProductCatalogueManager() {
     }
   };
 
+  const beginScraplingRefresh = async (useFallback = false) => {
+    setScraplingReview({ loading: true, candidates: [] });
+    setFeedback(null);
+    try {
+      const res = await fetch('/api/scrapling/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ useFallback }),
+      });
+      const data = await res.json() as {
+        ok: boolean;
+        error?: string;
+        fallbackAvailable?: boolean;
+        products?: Array<{
+          name: string;
+          brand: string | null;
+          supermarketId: SupermarketId;
+          packSize: number;
+          unit: BaseUnit;
+          price: number;
+          unitPrice?: { amount: number; unit: 'kg' | 'l' | 'un' };
+          isWeighted?: boolean;
+          productUrl: string;
+          retrievedAt: string;
+          sourceProductId: string;
+          suggestedIngredientId?: string;
+          weightedNote?: string;
+        }>;
+      };
+      if (!res.ok || !data.ok) {
+        setScraplingReview({
+          loading: false,
+          error: data.error || ptPT.scraplingPythonUnavailable,
+          fallbackAvailable: Boolean(data.fallbackAvailable),
+          candidates: [],
+        });
+        return;
+      }
+      const candidates: ScraplingCandidateReview[] = (data.products || []).map((p, idx) => {
+        const suggested = seedCatalogue.ingredients.find((i) => i.id === p.suggestedIngredientId);
+        const defaultIngredient = suggested ?? seedCatalogue.ingredients[0]!;
+        return {
+          id: `scrapling-${p.supermarketId}-${p.sourceProductId || idx}`,
+          name: p.name,
+          brand: p.brand || null,
+          supermarketId: p.supermarketId,
+          packSize: p.packSize,
+          unit: defaultIngredient.baseUnit ?? p.unit ?? 'g',
+          price: p.price,
+          unitPrice: p.unitPrice,
+          isWeighted: Boolean(p.isWeighted),
+          productUrl: p.productUrl,
+          retrievedAt: p.retrievedAt || new Date().toISOString(),
+          sourceProductId: p.sourceProductId || `pid-${idx}`,
+          ingredientId: defaultIngredient.id,
+          allergens: 'unknown',
+          dietCompatibility: {
+            vegetariana: 'desconhecido',
+            vegana: 'desconhecido',
+            sem_gluten: 'desconhecido',
+            sem_lactose: 'desconhecido',
+          },
+          weightedNote: p.weightedNote,
+          approved: false,
+        };
+      });
+      setScraplingReview({ loading: false, candidates });
+    } catch (err) {
+      setScraplingReview({
+        loading: false,
+        error: err instanceof Error ? err.message : ptPT.scraplingPythonUnavailable,
+        fallbackAvailable: true,
+        candidates: [],
+      });
+    }
+  };
+
+  const updateCandidateIngredient = (id: string, ingredientId: string) => {
+    const ingredient = seedCatalogue.ingredients.find((i) => i.id === ingredientId);
+    setScraplingReview((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        candidates: prev.candidates.map((c) => (c.id === id ? { ...c, ingredientId, unit: ingredient?.baseUnit ?? c.unit } : c)),
+      };
+    });
+  };
+
+  const updateCandidateAllergens = (id: string, allergens: AllergenInfo) => {
+    setScraplingReview((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        candidates: prev.candidates.map((c) => (c.id === id ? { ...c, allergens } : c)),
+      };
+    });
+  };
+
+  const updateCandidateDiet = (id: string, tag: DietTag, status: DietStatus) => {
+    setScraplingReview((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        candidates: prev.candidates.map((c) => (c.id === id ? { ...c, dietCompatibility: { ...c.dietCompatibility, [tag]: status } } : c)),
+      };
+    });
+  };
+
+  const approveScraplingCandidate = (c: ScraplingCandidateReview) => {
+    if (!isCandidateSafetyConfirmed(c)) return;
+    const checkedAt = c.retrievedAt;
+    const checkedDate = lisbonDate(checkedAt);
+    const newProduct: Product = {
+      id: `scrapling-${c.supermarketId}-${c.sourceProductId}`,
+      name: c.name,
+      brand: c.brand,
+      supermarketId: c.supermarketId,
+      ingredientId: c.ingredientId,
+      packSize: c.packSize,
+      unit: c.unit,
+      price: c.price,
+      priceState: 'observado',
+      priceUpdatedAt: checkedDate,
+      priceObservation: {
+        provider: 'scrapling',
+        sourceProductId: c.sourceProductId,
+        checkedAt,
+        checkedDate,
+        currency: 'EUR',
+        availability: 'available',
+        ...(c.unitPrice ? { unitPrice: c.unitPrice } : {}),
+      },
+      allergens: c.allergens,
+      dietCompatibility: c.dietCompatibility,
+      productUrl: c.productUrl,
+      catalogueSource: 'scrapling',
+    };
+
+    const previous = products.find((p) => p.id === newProduct.id);
+    const withHistory = previous
+      ? withPriceHistory(previous, newProduct, checkedAt, 'Observação Scrapling')
+      : { ...newProduct, priceHistory: initialPriceHistory(newProduct, checkedAt, 'Observação Scrapling') };
+    const nextProducts = previous
+      ? products.map((p) => (p.id === previous.id ? withHistory : p))
+      : [...products, withHistory];
+
+    if (persistProducts(nextProducts)) {
+      setScraplingReview((prev) => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          candidates: prev.candidates.map((item) => (item.id === c.id ? { ...item, approved: true } : item)),
+        };
+      });
+      setFeedback({ kind: 'success', message: ptPT.scraplingProductApproved });
+    }
+  };
+
   if (!ready) return <main className="catalogue-shell"><p className="loading-message">{ptPT.loadingCatalogue}</p></main>;
   return <main className="catalogue-shell">
     <header className="results-topbar"><a className="brand" href="/plan"><span className="brand-mark" aria-hidden="true">s</span><span><span className="brand-name">SmartBasket</span><span className="brand-caption">{ptPT.brandLine}</span></span></a><a className="text-link" href="/plan">{ptPT.backToPlan}</a></header>
@@ -250,9 +444,51 @@ export function ProductCatalogueManager() {
         <div className="catalogue-filter"><label htmlFor="catalogue-search">{ptPT.searchProducts}</label><input id="catalogue-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={ptPT.searchProductsHint} /></div>
         <label className="catalogue-filter"><span>{ptPT.supermarket}</span><select value={supermarket} onChange={(event) => setSupermarket(event.target.value as SupermarketId | 'todos')}><option value="todos">{ptPT.allSupermarkets}</option>{SUPERMARKETS.map((id) => <option value={id} key={id}>{supermarketLabels[id]}</option>)}</select></label>
         <button className="button button-primary" type="button" onClick={beginAdd}>{ptPT.addProduct}</button>
+        <button className="button button-secondary" type="button" onClick={() => void beginScraplingRefresh(false)}>{ptPT.refreshScraplingPrices}</button>
         <div className="catalogue-export"><button className="button button-secondary" type="button" onClick={exportCsv}>{ptPT.exportCsv}</button><button className="button button-secondary" type="button" onClick={exportJson}>{ptPT.exportJson}</button></div>
       </section>
       {feedback && <p className={`catalogue-feedback ${feedback.kind}`} role={feedback.kind === 'error' ? 'alert' : 'status'}>{feedback.message}</p>}
+      {scraplingReview && (
+        <section className="scrapling-review-panel" aria-label={ptPT.scraplingReviewTitle}>
+          <div className="scrapling-review-header">
+            <div>
+              <h2>{ptPT.scraplingReviewTitle}</h2>
+              <p>{ptPT.scraplingReviewDescription}</p>
+            </div>
+            <button className="text-link" type="button" onClick={() => setScraplingReview(null)}>
+              {ptPT.scraplingDismiss}
+            </button>
+          </div>
+
+          {scraplingReview.loading && <p className="loading-message">{ptPT.scraplingLoading}</p>}
+
+          {scraplingReview.error && (
+            <div className="scrapling-error-banner" role="alert">
+              <p>{scraplingReview.error}</p>
+              {scraplingReview.fallbackAvailable && (
+                <button className="button button-secondary" type="button" onClick={() => void beginScraplingRefresh(true)}>
+                  {ptPT.scraplingLoadHistorical}
+                </button>
+              )}
+            </div>
+          )}
+
+          {scraplingReview.candidates.length > 0 && (
+            <div className="scrapling-candidates-grid">
+              {scraplingReview.candidates.map((candidate) => (
+                <ScraplingCandidateCard
+                  key={candidate.id}
+                  candidate={candidate}
+                  onIngredientChange={(ingredientId) => updateCandidateIngredient(candidate.id, ingredientId)}
+                  onAllergensChange={(allergens) => updateCandidateAllergens(candidate.id, allergens)}
+                  onDietChange={(tag, status) => updateCandidateDiet(candidate.id, tag, status)}
+                  onApprove={() => approveScraplingCandidate(candidate)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
       {adding && draft && priceForm && <ProductEditor draft={draft} priceForm={priceForm} isNew onChange={setDraft} onPriceFormChange={setPriceForm} onSave={saveDraft} onCancel={cancelEdit} />}
       <section className="catalogue-list" aria-label={ptPT.productCatalogueTitle}>
         <div className="catalogue-list-heading"><strong>{filteredProducts.length} {ptPT.products}</strong><span>{ptPT.pricesDoNotChangeSource}</span></div>
@@ -314,4 +550,143 @@ function ProductEditor({ draft, priceForm, isNew, onChange, onPriceFormChange, o
 function HistoryPanel({ entries }: { entries: PriceHistoryEntry[] }) {
   if (!entries.length) return <p className="history-empty">{ptPT.noPriceHistory}</p>;
   return <ol className="price-history-list">{[...entries].reverse().map((entry) => <li key={entry.id}>{priceHistoryText(entry)}</li>)}</ol>;
+}
+
+function ScraplingCandidateCard({
+  candidate,
+  onIngredientChange,
+  onAllergensChange,
+  onDietChange,
+  onApprove,
+}: {
+  candidate: ScraplingCandidateReview;
+  onIngredientChange: (ingredientId: string) => void;
+  onAllergensChange: (allergens: AllergenInfo) => void;
+  onDietChange: (tag: DietTag, status: DietStatus) => void;
+  onApprove: () => void;
+}) {
+  const isSafetyOk = isCandidateSafetyConfirmed(candidate);
+
+  const toggleAllergen = (allergen: Allergen) => {
+    if (candidate.allergens === 'unknown') return;
+    const next = candidate.allergens.includes(allergen)
+      ? candidate.allergens.filter((a) => a !== allergen)
+      : [...candidate.allergens, allergen];
+    onAllergensChange(next);
+  };
+
+  return (
+    <article className="scrapling-candidate-card">
+      <div className="scrapling-candidate-summary">
+        <div className="scrapling-candidate-title">
+          <div className="supermarket-tag">{supermarketLabels[candidate.supermarketId]}</div>
+          <strong>{candidate.name}</strong>
+          <span>
+            {candidate.brand || ptPT.brandNotProvided} · {candidate.packSize} {baseUnitLabels[candidate.unit]}
+          </span>
+          {candidate.isWeighted && <span className="generic-tag">{ptPT.weightedProductNotice}</span>}
+          {candidate.weightedNote && <small className="weighted-note">{candidate.weightedNote}</small>}
+        </div>
+
+        <div className="scrapling-candidate-price">
+          <strong>{candidate.price.toFixed(2)} €</strong>
+          {candidate.unitPrice && (
+            <span>{candidate.unitPrice.amount.toFixed(2)} €/{candidate.unitPrice.unit}</span>
+          )}
+          <small>{ptPT.retrievalTimestamp}: {new Intl.DateTimeFormat('pt-PT', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(candidate.retrievedAt))}</small>
+          <a href={candidate.productUrl} target="_blank" rel="noreferrer" className="text-link">
+            {ptPT.openProductSource}
+          </a>
+        </div>
+      </div>
+
+      <div className="scrapling-candidate-form">
+        <label className="scrapling-field">
+          <span>{ptPT.manualIngredientMatchingNotice}</span>
+          <select
+            value={candidate.ingredientId}
+            onChange={(e) => onIngredientChange(e.target.value)}
+          >
+            {seedCatalogue.ingredients.map((ing) => (
+              <option key={ing.id} value={ing.id}>
+                {ing.name} ({categoryLabels[ing.category]})
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <fieldset className="scrapling-safety-box">
+          <legend>{ptPT.allergensProduct}</legend>
+          <label className="checkbox-choice">
+            <input
+              type="radio"
+              name={`allergens-${candidate.id}`}
+              checked={candidate.allergens === 'unknown'}
+              onChange={() => onAllergensChange('unknown')}
+            />
+            {ptPT.unknownAllergensOption}
+          </label>
+          <label className="checkbox-choice">
+            <input
+              type="radio"
+              name={`allergens-${candidate.id}`}
+              checked={candidate.allergens !== 'unknown'}
+              onChange={() => onAllergensChange(candidate.allergens === 'unknown' ? [] : candidate.allergens)}
+            />
+            Informação de alergénios conferida no rótulo
+          </label>
+          {candidate.allergens !== 'unknown' && (
+            <div className="allergen-grid">
+              {ALLERGENS.map((allergen) => (
+                <label className="allergen-checkbox" key={allergen}>
+                  <input
+                    type="checkbox"
+                    checked={candidate.allergens !== 'unknown' && candidate.allergens.includes(allergen)}
+                    onChange={() => toggleAllergen(allergen)}
+                  />
+                  {allergenLabels[allergen]}
+                </label>
+              ))}
+            </div>
+          )}
+        </fieldset>
+
+        <fieldset className="scrapling-safety-box">
+          <legend>{ptPT.dietProduct}</legend>
+          <div className="diet-editor-grid">
+            {DIET_TAGS.map((tag) => (
+              <label key={tag}>
+                {dietTagLabels[tag]}
+                <select
+                  value={candidate.dietCompatibility[tag]}
+                  onChange={(e) => onDietChange(tag, e.target.value as DietStatus)}
+                >
+                  <option value="desconhecido">{ptPT.dietStatusUnknown}</option>
+                  <option value="compativel">{ptPT.dietStatusCompatible}</option>
+                  <option value="incompativel">{ptPT.dietStatusIncompatible}</option>
+                </select>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
+      {!isSafetyOk && (
+        <div className="scrapling-safety-blocked" role="alert">
+          {ptPT.scraplingApproveBlockedNotice}
+        </div>
+      )}
+
+      <div className="scrapling-candidate-actions">
+        <button
+          className="button button-primary"
+          type="button"
+          disabled={!isSafetyOk || candidate.approved}
+          onClick={onApprove}
+        >
+          {candidate.approved ? 'Aprovado ✓' : ptPT.scraplingApproveProduct}
+        </button>
+      </div>
+    </article>
+  );
 }

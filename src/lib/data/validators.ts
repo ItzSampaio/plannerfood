@@ -151,7 +151,7 @@ function validateProductPrice(value: Record<string, unknown>, path: string, erro
 }
 
 function validatePriceObservation(value: unknown, price: unknown, path: string, errors: ValidationError[], availability: 'available' | 'unavailable'): void {
-  if (!isRecord(value) || value.provider !== 'cesta_mcp' || typeof value.sourceProductId !== 'string' || !value.sourceProductId.trim()
+  if (!isRecord(value) || (value.provider !== 'cesta_mcp' && value.provider !== 'scrapling') || typeof value.sourceProductId !== 'string' || !value.sourceProductId.trim()
     || typeof value.checkedAt !== 'string' || Number.isNaN(Date.parse(value.checkedAt))
     || !isIsoDate(value.checkedDate) || value.currency !== 'EUR' || value.availability !== availability) {
     add(errors, 'price.observation_invalid', `${path}.priceObservation`, 'Observation requires a valid source, product ID, timestamp, date, currency, and availability state.');
@@ -190,7 +190,7 @@ export function validateProducts(input: unknown, ingredientInput: unknown): Vali
     if (value.brand !== undefined && value.brand !== null && (typeof value.brand !== 'string' || !value.brand.trim())) add(errors, 'brand.invalid', `${path}.brand`, 'Brand must be a non-empty string when provided.');
     if (value.productUrl !== undefined && value.productUrl !== null && !isWebUrl(value.productUrl)) add(errors, 'product_url.invalid', `${path}.productUrl`, 'Product URL must be an HTTP(S) URL when provided.');
     if (value.barcode !== undefined && value.barcode !== null && (typeof value.barcode !== 'string' || !/^\d{8,14}$/.test(value.barcode))) add(errors, 'barcode.invalid', `${path}.barcode`, 'Barcode must contain 8 to 14 digits when provided.');
-    if (value.catalogueSource !== undefined && !['generic_seed', 'user', 'open_prices', 'cesta_mcp'].includes(String(value.catalogueSource))) add(errors, 'catalogue_source.invalid', `${path}.catalogueSource`, 'Unknown catalogue source.');
+    if (value.catalogueSource !== undefined && !['generic_seed', 'user', 'open_prices', 'cesta_mcp', 'scrapling'].includes(String(value.catalogueSource))) add(errors, 'catalogue_source.invalid', `${path}.catalogueSource`, 'Unknown catalogue source.');
     if (value.barcodes !== undefined && (!Array.isArray(value.barcodes) || value.barcodes.some((code) => typeof code !== 'string' || !/^\d{8,14}$/.test(code)))) add(errors, 'barcodes.invalid', `${path}.barcodes`, 'Barcodes must be valid EAN digit strings.');
     if (value.imageUrl !== undefined && value.imageUrl !== null && !isWebUrl(value.imageUrl)) add(errors, 'image_url.invalid', `${path}.imageUrl`, 'Image URL must be HTTP(S).');
     if (value.imageSourceUrl !== undefined && value.imageSourceUrl !== null && !isWebUrl(value.imageSourceUrl)) add(errors, 'image_source_url.invalid', `${path}.imageSourceUrl`, 'Image source URL must be HTTP(S).');

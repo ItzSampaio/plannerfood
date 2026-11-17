@@ -22,7 +22,7 @@ export type RecipeUnit = BaseUnit | LooseUnit;
 export type IngredientCategory = 'carne_peixe' | 'laticinios_ovos' | 'frutas_legumes' | 'hidratos' | 'despensa';
 export type PriceState = 'manual' | 'verificado' | 'observado' | 'estimativa' | 'desconhecido';
 export type PriceObservation = {
-  provider: 'cesta_mcp';
+  provider: 'cesta_mcp' | 'scrapling';
   sourceProductId: string;
   checkedAt: string;
   checkedDate: string;
@@ -80,7 +80,7 @@ export type Product = {
   availability?: 'available' | 'unavailable';
   unitPrice?: { amount: number; unit: 'kg' | 'l' | 'un' };
   priceObservation?: PriceObservation;
-  catalogueSource?: 'generic_seed' | 'user' | 'open_prices' | 'cesta_mcp';
+  catalogueSource?: 'generic_seed' | 'user' | 'open_prices' | 'cesta_mcp' | 'scrapling';
   priceHistory?: PriceHistoryEntry[];
 };
 

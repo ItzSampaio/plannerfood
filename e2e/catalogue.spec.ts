@@ -66,3 +66,65 @@ test('edited catalogue prices flow through product selection and the Phase 2 bas
   await expect(shoppingLine).toContainText('0,01 €');
   await expect(shoppingLine).toContainText(formatCents(line.selection.packs));
 });
+
+test('scrapling review panel allows human review, blocks unknown safety, and imports approved observation', async ({ page }) => {
+  await page.route('**/api/scrapling/refresh', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        ok: true,
+        source: 'scrapling_worker',
+        products: [
+          {
+            name: 'Arroz Agulha Continente',
+            brand: 'Continente',
+            supermarketId: 'continente',
+            packSize: 1000,
+            unit: 'g',
+            price: 1.15,
+            unitPrice: { amount: 1.15, unit: 'kg' },
+            isWeighted: false,
+            productUrl: 'https://www.continente.pt/produto/arroz-agulha-continente-2027209.html',
+            retrievedAt: new Date().toISOString(),
+            sourceProductId: '2027209',
+            suggestedIngredientId: 'arroz',
+          },
+        ],
+      }),
+    });
+  });
+
+  await page.goto('/catalogo');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+
+  await page.getByRole('button', { name: 'Atualizar preços Scrapling' }).click();
+  await expect(page.getByText('Painel de revisão Scrapling')).toBeVisible();
+  await expect(page.getByText('Arroz Agulha Continente')).toBeVisible();
+
+  const approveButton = page.getByRole('button', { name: 'Aprovar e importar' });
+  await expect(approveButton).toBeDisabled();
+  await expect(page.getByText('Aprovação bloqueada')).toBeVisible();
+
+  // Confirm allergens
+  await page.getByLabel('Informação de alergénios conferida no rótulo').check();
+
+  // Confirm all 4 diets
+  const selects = page.locator('.diet-editor-grid select');
+  const count = await selects.count();
+  for (let i = 0; i < count; i++) {
+    await selects.nth(i).selectOption('compativel');
+  }
+
+  // Approval button is now enabled
+  await expect(approveButton).toBeEnabled();
+  await approveButton.click();
+
+  await expect(page.getByText('Aprovado ✓')).toBeVisible();
+  const saved = await page.evaluate(() => JSON.parse(window.localStorage.getItem('smartbasket:product-catalogue:v1') ?? 'null'));
+  const product = saved.products.find((item: { name: string }) => item.name === 'Arroz Agulha Continente');
+  expect(product.priceState).toBe('observado');
+  expect(product.price).toBe(1.15);
+  expect(product.priceObservation.provider).toBe('scrapling');
+});
